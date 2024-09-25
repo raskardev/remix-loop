@@ -1,4 +1,4 @@
-import { InfinityIcon, Menu, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import Link from "next/link";
 import colors from "tailwindcss/colors";
 
@@ -10,9 +10,10 @@ export function Header() {
         href="/"
         className="text-4xl text-white uppercase font-bold flex items-center gap-x-3"
       >
-        <InfinityIcon color="white" />
+        NAME
+        {/* <InfinityIcon color="white" />
         Loop
-        <InfinityIcon color="white" />
+        <InfinityIcon color="white" /> */}
       </Link>
       <Link href="/sign-in">
         <User color={colors.white} />
