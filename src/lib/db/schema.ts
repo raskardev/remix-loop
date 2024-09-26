@@ -188,3 +188,6 @@ export const paymentDetailsRelations = relations(paymentDetails, ({ one }) => ({
     references: [orders.id],
   }),
 }));
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
