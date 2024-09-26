@@ -39,11 +39,40 @@ export const products = sqliteTable("products", {
     length: 200,
   }).notNull(),
   categoryId: text("category_id").references(() => categories.id),
-  price: real("price").notNull(),
-  stock: integer("stock").notNull(),
   active: integer("active", {
     mode: "boolean",
   }).default(false),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const sizes = sqliteTable("sizes", {
+  id: text("id").default(sql`(uuid())`).primaryKey(),
+  name: text("name", {
+    length: 100,
+  })
+    .notNull()
+    .unique(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const colors = sqliteTable("colors", {
+  id: text("id").default(sql`(uuid())`).primaryKey(),
+  name: text("name", {
+    length: 100,
+  })
+    .notNull()
+    .unique(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const productVariants = sqliteTable("product_variants", {
+  id: text("id").default(sql`(uuid())`).primaryKey(),
+  productId: text("product_id").references(() => products.id),
+  sizeId: text("size_id").references(() => sizes.id),
+  colorId: text("color_id").references(() => colors.id),
+  stock: integer("stock").notNull(),
+  price: real("price").notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
@@ -100,7 +129,9 @@ export const carts = sqliteTable("carts", {
 export const cartProducts = sqliteTable("cart_products", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
   cartId: text("cart_id").references(() => carts.id),
-  productId: text("product_id").references(() => products.id),
+  productVariantId: text("product_variant_id").references(
+    () => productVariants.id,
+  ),
   quantity: integer("quantity").default(1).notNull(),
 });
 
@@ -115,7 +146,9 @@ export const orderItems = sqliteTable("order_items", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
   quantity: integer("quantity").default(1).notNull(),
   orderId: text("order_id").references(() => orders.id),
-  productId: text("product_id").references(() => products.id),
+  productVariantId: text("product_variant_id").references(
+    () => productVariants.id,
+  ),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
@@ -126,37 +159,42 @@ export const paymentDetails = sqliteTable("payment_details", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productRelations = relations(products, ({ one }) => ({
   category: one(categories, {
     fields: [products.categoryId],
     references: [categories.id],
   }),
 }));
 
-export const categoriesRelations = relations(categories, ({ many }) => ({
+export const categoryRelations = relations(categories, ({ many }) => ({
   categoryProducts: many(products),
 }));
 
-export const wishlistsRelations = relations(wishlists, ({ one, many }) => ({
-  user: one(users, {
-    fields: [wishlists.userId],
-    references: [users.id],
-  }),
+export const sizeRelations = relations(sizes, ({ many }) => ({
+  productVariants: many(productVariants),
 }));
 
-export const cartsRelations = relations(carts, ({ one }) => ({
-  user: one(users, {
-    fields: [carts.userId],
-    references: [users.id],
-  }),
+export const colorRelations = relations(colors, ({ many }) => ({
+  productVariants: many(productVariants),
 }));
 
-export const cartProductsRelations = relations(cartProducts, ({ one }) => ({
-  cart: one(carts, {
-    fields: [cartProducts.id],
-    references: [carts.id],
+export const productVariantRelations = relations(
+  productVariants,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productVariants.productId],
+      references: [products.id],
+    }),
+    size: one(sizes, {
+      fields: [productVariants.sizeId],
+      references: [sizes.id],
+    }),
+    color: one(colors, {
+      fields: [productVariants.colorId],
+      references: [colors.id],
+    }),
   }),
-}));
+);
 
 export const orderRelations = relations(orders, ({ one }) => ({
   user: one(users, {
@@ -186,6 +224,27 @@ export const paymentDetailsRelations = relations(paymentDetails, ({ one }) => ({
   order: one(orders, {
     fields: [paymentDetails.orderId],
     references: [orders.id],
+  }),
+}));
+
+export const cartsRelations = relations(carts, ({ one }) => ({
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const cartProductsRelations = relations(cartProducts, ({ one }) => ({
+  cart: one(carts, {
+    fields: [cartProducts.id],
+    references: [carts.id],
+  }),
+}));
+
+export const wishlistsRelations = relations(wishlists, ({ one, many }) => ({
+  user: one(users, {
+    fields: [wishlists.userId],
+    references: [users.id],
   }),
 }));
 

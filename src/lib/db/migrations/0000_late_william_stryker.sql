@@ -1,10 +1,10 @@
 CREATE TABLE `cart_products` (
 	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
 	`cart_id` text,
-	`product_id` text,
+	`product_variant_id` text,
 	`quantity` integer DEFAULT 1 NOT NULL,
 	FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `carts` (
@@ -19,14 +19,20 @@ CREATE TABLE `categories` (
 	`slug` text(50) NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE `colors` (
+	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`name` text(100) NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE `order_items` (
 	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
 	`quantity` integer DEFAULT 1 NOT NULL,
 	`order_id` text,
-	`product_id` text,
+	`product_variant_id` text,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `orders` (
@@ -45,13 +51,25 @@ CREATE TABLE `payment_details` (
 	FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `product_variants` (
+	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`product_id` text,
+	`size_id` text,
+	`color_id` text,
+	`stock` integer NOT NULL,
+	`price` real NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`size_id`) REFERENCES `sizes`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`color_id`) REFERENCES `colors`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `products` (
 	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
 	`name` text(50) NOT NULL,
 	`description` text(200) NOT NULL,
 	`category_id` text,
-	`price` real NOT NULL,
-	`stock` integer NOT NULL,
 	`active` integer DEFAULT false,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -76,6 +94,12 @@ CREATE TABLE `shipping_addresses` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `sizes` (
+	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`name` text(100) NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
 	`name` text(100) NOT NULL,
@@ -95,5 +119,7 @@ CREATE TABLE `wishlists` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `categories_name_unique` ON `categories` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `colors_name_unique` ON `colors` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `products_name_unique` ON `products` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `sizes_name_unique` ON `sizes` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);

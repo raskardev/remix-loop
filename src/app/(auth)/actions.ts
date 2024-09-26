@@ -1,10 +1,14 @@
 "use server";
 
-import { validatedAction } from "@/lib/auth/middleware";
+import {
+  validatedAction,
+  validatedActionWithUser,
+} from "@/lib/auth/middleware";
 import { comparePasswords, hashPassword, setSession } from "@/lib/auth/session";
 import { db } from "@/lib/db/drizzle";
 import { type NewUser, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -66,7 +70,7 @@ const signUpSchema = z
     path: ["passwordConfirm"],
   });
 
-export const signUp = validatedAction(signUpSchema, async (data, formData) => {
+export const signUp = validatedAction(signUpSchema, async (data, _) => {
   const { name, email, password } = data;
 
   const existingUser = await db
@@ -104,3 +108,69 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 export async function signOut() {
   cookies().delete("session");
 }
+
+const updateAccountSchema = z.object({
+  name: z.string().min(3, {
+    message: "Name is required and must be at least 3 characters",
+  }),
+  email: z.string().email({
+    message: "Email is invalid",
+  }),
+});
+
+export const updateAccount = validatedActionWithUser(
+  updateAccountSchema,
+  async (data, _, user) => {
+    const { name, email } = data;
+
+    await db.update(users).set({ name, email }).where(eq(users.id, user.id));
+
+    revalidatePath("/account");
+
+    return { success: "Account updated successfully" };
+  },
+);
+
+const updatePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(8, {
+      message: "Password is required and must be at least 8 characters",
+    }),
+    newPassword: z.string().min(8, {
+      message: "Password is required and must be at least 8 characters",
+    }),
+    passwordConfirm: z.string().min(8, {
+      message: "Password is required and must be at least 8 characters",
+    }),
+  })
+  .refine((data) => data.newPassword === data.passwordConfirm, {
+    message: "Passwords don't match",
+    path: ["passwordConfirm"],
+  });
+
+export const updatePassword = validatedActionWithUser(
+  updatePasswordSchema,
+  async (data, _, user) => {
+    const { currentPassword, newPassword } = data;
+
+    const isPasswordValid = await comparePasswords(
+      currentPassword,
+      user.passwordHash,
+    );
+
+    if (!isPasswordValid) {
+      return {
+        error: "Invalid current password. Please try again.",
+        data,
+      };
+    }
+
+    const passwordHash = await hashPassword(newPassword);
+
+    await db.update(users).set({ passwordHash }).where(eq(users.id, user.id));
+
+    revalidatePath("/account");
+
+    return { success: "Password updated successfully" };
+  },
+);
