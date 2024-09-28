@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 export default function SignUpPage() {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
 
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     signUp,
@@ -21,7 +21,7 @@ export default function SignUpPage() {
   );
 
   return (
-    <main className="flex items-center justify-center min-h-dvh">
+    <div className="flex-1 flex items-center justify-center">
       <div className="max-w-xs w-full">
         <h2 className="text-2xl font-extrabold mb-4">Sign up to Loop</h2>
         <h3>{user?.name}</h3>
@@ -123,6 +123,6 @@ export default function SignUpPage() {
           </Button>
         </p>
       </div>
-    </main>
+    </div>
   );
 }

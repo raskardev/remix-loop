@@ -31,11 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white dark flex flex-col min-h-dvh`}
       >
         <UserProvider userPromise={userPromise}>
           <Header />
-          {children}
+          <main className="flex-1 px-12 flex flex-col">{children}</main>
         </UserProvider>
       </body>
     </html>

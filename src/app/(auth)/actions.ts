@@ -6,7 +6,7 @@ import {
 } from "@/lib/auth/middleware";
 import { comparePasswords, hashPassword, setSession } from "@/lib/auth/session";
 import { db } from "@/lib/db/drizzle";
-import { type NewUser, users } from "@/lib/db/schema";
+import { type NewUser, usersSchema } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -23,8 +23,8 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 
   const usersData = await db
     .select()
-    .from(users)
-    .where(eq(users.email, email))
+    .from(usersSchema)
+    .where(eq(usersSchema.email, email))
     .limit(1);
 
   if (usersData.length === 0) {
@@ -75,8 +75,8 @@ export const signUp = validatedAction(signUpSchema, async (data, _) => {
 
   const existingUser = await db
     .select()
-    .from(users)
-    .where(eq(users.email, email))
+    .from(usersSchema)
+    .where(eq(usersSchema.email, email))
     .limit(1);
 
   if (existingUser.length > 0) {
@@ -94,7 +94,10 @@ export const signUp = validatedAction(signUpSchema, async (data, _) => {
     passwordHash,
   };
 
-  const [createdUser] = await db.insert(users).values(newUser).returning();
+  const [createdUser] = await db
+    .insert(usersSchema)
+    .values(newUser)
+    .returning();
 
   if (!createdUser) {
     return { error: "Failed to create user. Please try again.", data };
@@ -123,7 +126,10 @@ export const updateAccount = validatedActionWithUser(
   async (data, _, user) => {
     const { name, email } = data;
 
-    await db.update(users).set({ name, email }).where(eq(users.id, user.id));
+    await db
+      .update(usersSchema)
+      .set({ name, email })
+      .where(eq(usersSchema.id, user.id));
 
     revalidatePath("/account");
 
@@ -167,7 +173,10 @@ export const updatePassword = validatedActionWithUser(
 
     const passwordHash = await hashPassword(newPassword);
 
-    await db.update(users).set({ passwordHash }).where(eq(users.id, user.id));
+    await db
+      .update(usersSchema)
+      .set({ passwordHash })
+      .where(eq(usersSchema.id, user.id));
 
     revalidatePath("/account");
 
