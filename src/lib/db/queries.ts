@@ -40,7 +40,9 @@ export async function getMainCategories() {
   const categories = await db
     .select()
     .from(categoriesSchema)
-    .where(isNull(categoriesSchema.parentId));
+    .where(
+      and(isNull(categoriesSchema.parentId), eq(categoriesSchema.active, true)),
+    );
 
   return categories;
 }
@@ -64,6 +66,7 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
   const whereFilters: SQL[] = [
     gte(productVariantsSchema.stock, 1),
     inArray(productsSchema.targetGender, [gender, "U"]),
+    eq(productsSchema.active, true),
   ];
 
   if (categoryId) {

@@ -20,7 +20,7 @@ export function ProductCard({ product }: Props) {
         src={product.imageUrl}
         alt={product.name ?? ""}
         width={999}
-        height={100}
+        height={999}
       />
       <div className="mt-3">
         <span className="block text-center text-sm">{product.name}</span>

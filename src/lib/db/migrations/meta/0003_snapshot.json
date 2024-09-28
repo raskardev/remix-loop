@@ -1,7 +1,7 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "f6801c08-e92a-45e2-9b21-7058a262a1e8",
+	"id": "81541ef3-7a6d-4bd5-9489-9da5dbea2a62",
 	"prevId": "fb761c48-3156-47f3-b2e2-e325b860b7c7",
 	"tables": {
 		"cart_products": {
@@ -120,6 +120,14 @@
 					"primaryKey": false,
 					"notNull": false,
 					"autoincrement": false
+				},
+				"active": {
+					"name": "active",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": false
 				},
 				"slug": {
 					"name": "slug",

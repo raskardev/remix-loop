@@ -21,7 +21,7 @@ export default async function CategoryGenderPage(props: Props) {
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-4 xl:grid-cols-5 gap-4 mt-6">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

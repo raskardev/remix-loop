@@ -24,6 +24,9 @@ export const categoriesSchema = sqliteTable("categories", {
     .notNull()
     .unique(),
   parentId: text("parent_id"),
+  active: integer("active", {
+    mode: "boolean",
+  }).default(false),
   slug: text("slug", {
     length: 50,
   }).notNull(),
