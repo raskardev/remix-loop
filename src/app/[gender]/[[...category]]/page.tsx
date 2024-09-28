@@ -1,3 +1,7 @@
+import { ProductCard } from "@/app/[gender]/[[...category]]/components/product-card";
+import { getProducts } from "@/lib/db/queries";
+import {} from "@/lib/db/schema";
+import {} from "drizzle-orm";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -7,8 +11,21 @@ type Props = {
   };
 };
 
-export default function CategoryGenderPage(props: Props) {
+export default async function CategoryGenderPage(props: Props) {
   if (props.params.category?.length > 1) redirect(`/${props.params.gender}`);
 
-  return <h1>CategoryGenderPage - {props.params.gender}</h1>;
+  const products = await getProducts({
+    gender: props.params.gender === "man" ? "M" : "F",
+    category: props.params.category,
+  });
+
+  return (
+    <div>
+      <div className="grid grid-cols-4 gap-4 mt-6">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
 }

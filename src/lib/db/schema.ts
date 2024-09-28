@@ -39,7 +39,15 @@ export const productsSchema = sqliteTable("products", {
   description: text("description", {
     length: 200,
   }).notNull(),
-  categoryId: text("category_id").references(() => categoriesSchema.id),
+  categoryId: text("category_id")
+    .references(() => categoriesSchema.id)
+    .notNull(),
+  targetGender: text("target_gender", {
+    length: 1,
+    enum: ["M", "F", "U"],
+  })
+    .notNull()
+    .default("U"),
   active: integer("active", {
     mode: "boolean",
   }).default(false),
@@ -74,6 +82,7 @@ export const productVariantsSchema = sqliteTable("product_variants", {
   colorId: text("color_id").references(() => colorsSchema.id),
   stock: integer("stock").notNull(),
   price: real("price").notNull(),
+  imageUrl: text("image_url").notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
@@ -271,3 +280,8 @@ export const wishlistsRelations = relations(
 export type User = typeof usersSchema.$inferSelect;
 export type NewUser = typeof usersSchema.$inferInsert;
 export type Category = typeof categoriesSchema.$inferSelect;
+export type NewCategory = typeof categoriesSchema.$inferInsert;
+export type Product = typeof productsSchema.$inferSelect;
+export type NewProduct = typeof productsSchema.$inferInsert;
+export type ProductVariant = typeof productVariantsSchema.$inferSelect;
+export type NewProductVariant = typeof productVariantsSchema.$inferInsert;
