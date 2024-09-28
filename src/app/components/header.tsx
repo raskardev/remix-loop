@@ -11,15 +11,15 @@ export async function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-transparent w-full px-12">
-      <div className="flex items-center justify-between h-24">
+      <div className="h-24 grid grid-cols-3 items-center">
         <Menu color="white" />
         <Link
           href="/"
-          className="text-4xl text-white uppercase font-bold flex items-center gap-x-3"
+          className="text-4xl text-white uppercase font-bold justify-self-center"
         >
           LOOP
         </Link>
-        <div className="flex items-center gap-x-6">
+        <div className="flex items-center gap-x-6 justify-self-end">
           <Button
             className="w-52 justify-start space-x-4 rounded-2xl border-foreground"
             variant="outline"

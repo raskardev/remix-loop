@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function CategoryGenderPage(props: Props) {
-  if (props.params.category?.length > 1) notFound();
+  if (props.params.category?.length > 1) redirect(`/${props.params.gender}`);
 
   return <h1>CategoryGenderPage - {props.params.gender}</h1>;
 }

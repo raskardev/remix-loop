@@ -15,9 +15,7 @@ export default function Home() {
           className="object-cover group-hover:scale-105 group-hover:rotate-2 duration-300"
         />
         <div className="absolute bg-black/20 inset-0 group-hover:bg-transparent duration-300" />
-        <h2 className="text-7xl text-white z-10 group-hover:underline group-hover:underline-offset-8 group-hover:decoration-1">
-          Woman
-        </h2>
+        <h2 className="text-7xl text-white z-10">Woman</h2>
       </Link>
       <Link
         href="/man"
@@ -31,9 +29,7 @@ export default function Home() {
         />
         <div className="absolute bg-black/20 inset-0 group-hover:bg-transparent duration-300" />
 
-        <h2 className="text-7xl text-white z-10 group-hover:underline group-hover:underline-offset-8 group-hover:decoration-1">
-          Man
-        </h2>
+        <h2 className="text-7xl text-white z-10">Man</h2>
       </Link>
     </main>
   );

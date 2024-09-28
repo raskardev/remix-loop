@@ -9,6 +9,8 @@ type Props = {
   categories: Category[];
 };
 
+const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account"];
+
 function CategoryLink({ category }: { category: Category }) {
   const pathname = usePathname();
 
@@ -37,8 +39,7 @@ function CategoryLink({ category }: { category: Category }) {
 export function CategorySelector({ categories }: Props) {
   const pathname = usePathname();
 
-  const show = ["/sign-in", "/sign-up", "/"].includes(pathname);
-
+  const show = EXCLUDED_PATHS.includes(pathname);
   if (show) return null;
 
   const allItems: Category = {
