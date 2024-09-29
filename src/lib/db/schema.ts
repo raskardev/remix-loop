@@ -45,6 +45,11 @@ export const productsSchema = sqliteTable("products", {
   categoryId: text("category_id")
     .references(() => categoriesSchema.id)
     .notNull(),
+  slug: text("slug", {
+    length: 50,
+  })
+    .notNull()
+    .default(""),
   targetGender: text("target_gender", {
     length: 1,
     enum: ["M", "F", "U"],
@@ -93,7 +98,9 @@ export const productVariantsSchema = sqliteTable("product_variants", {
 export const wishlistsSchema = sqliteTable("wishlists", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
   userId: text("user_id").references(() => usersSchema.id),
-  productId: text("product_id").references(() => productsSchema.id),
+  productVariantId: text("product_variant_id")
+    .references(() => productVariantsSchema.id)
+    .notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 

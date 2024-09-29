@@ -29,6 +29,27 @@
 			"when": 1727548900369,
 			"tag": "0003_perpetual_prima",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "6",
+			"when": 1727607235427,
+			"tag": "0004_equal_shinobi_shaw",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "6",
+			"when": 1727607493378,
+			"tag": "0005_fluffy_azazel",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "6",
+			"when": 1727646044715,
+			"tag": "0006_graceful_wallow",
+			"breakpoints": true
 		}
 	]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE `product_variants` ADD `slug` text DEFAULT "" NOT NULL;

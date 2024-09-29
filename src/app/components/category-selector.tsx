@@ -39,7 +39,8 @@ function CategoryLink({ category }: { category: Category }) {
 export function CategorySelector({ categories }: Props) {
   const pathname = usePathname();
 
-  const show = EXCLUDED_PATHS.includes(pathname);
+  const show =
+    EXCLUDED_PATHS.includes(pathname) || pathname.split("/").length >= 4;
   if (show) return null;
 
   const allItems: Category = {
@@ -47,6 +48,7 @@ export function CategorySelector({ categories }: Props) {
     name: "All",
     slug: "_",
     parentId: null,
+    active: true,
   };
 
   return (
