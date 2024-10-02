@@ -7,7 +7,16 @@ import {
   usersSchema,
   wishlistsSchema,
 } from "@/lib/db/schema";
-import { type SQL, and, eq, gte, inArray, isNull } from "drizzle-orm";
+import {
+  type SQL,
+  and,
+  eq,
+  gte,
+  inArray,
+  isNotNull,
+  isNull,
+} from "drizzle-orm";
+import { unstable_noStore as noStore } from "next/cache";
 import { cookies } from "next/headers";
 
 type GetProductsArgs = {
@@ -16,6 +25,11 @@ type GetProductsArgs = {
 };
 
 type CreateDeleteWishlistArgs = {
+  productVariantId: string;
+  userId: string;
+};
+
+type ExistsWishlistArgs = {
   productVariantId: string;
   userId: string;
 };
@@ -67,6 +81,9 @@ async function getCategoryIdBySlug(slug?: string) {
 }
 
 export async function getProducts({ gender, category }: GetProductsArgs) {
+  noStore();
+
+  const user = await getUser();
   const categoryId = await getCategoryIdBySlug(category);
 
   const whereFilters: SQL[] = [
@@ -87,10 +104,7 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
       imageUrl: productVariantsSchema.imageUrl,
       productSlug: productsSchema.slug,
       categorySlug: categoriesSchema.slug,
-      isWishlisted: eq(
-        wishlistsSchema.productVariantId,
-        productVariantsSchema.id,
-      ),
+      isWishlisted: isNotNull(wishlistsSchema.userId),
     })
     .from(productVariantsSchema)
     .leftJoin(
@@ -103,14 +117,16 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
     )
     .leftJoin(
       wishlistsSchema,
-      eq(productVariantsSchema.id, wishlistsSchema.productVariantId),
+      and(
+        eq(productVariantsSchema.id, wishlistsSchema.productVariantId),
+        eq(wishlistsSchema.userId, user?.id ?? ""),
+      ),
     )
     .where(and(...whereFilters))
     .then((result) =>
       result.map((product) => ({
         ...product,
-        isWishlisted:
-          product.isWishlisted === 1 && product.isWishlisted !== null,
+        isWishlisted: product.isWishlisted === 1,
       })),
     );
 
@@ -118,6 +134,10 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
 }
 
 export async function getProduct(slug: string) {
+  noStore();
+
+  const user = await getUser();
+
   const product = await db
     .select({
       name: productsSchema.name,
@@ -125,10 +145,7 @@ export async function getProduct(slug: string) {
       price: productVariantsSchema.price,
       imageUrl: productVariantsSchema.imageUrl,
       productVariantId: productVariantsSchema.id,
-      isWishlisted: eq(
-        wishlistsSchema.productVariantId,
-        productVariantsSchema.id,
-      ),
+      isWishlisted: isNotNull(wishlistsSchema.userId),
     })
     .from(productVariantsSchema)
     .leftJoin(
@@ -137,15 +154,17 @@ export async function getProduct(slug: string) {
     )
     .leftJoin(
       wishlistsSchema,
-      eq(productVariantsSchema.id, wishlistsSchema.productVariantId),
+      and(
+        eq(productVariantsSchema.id, wishlistsSchema.productVariantId),
+        eq(wishlistsSchema.userId, user?.id ?? ""),
+      ),
     )
-    .where(eq(productsSchema.slug, slug))
+    .where(and(eq(productsSchema.slug, slug), eq(productsSchema.active, true)))
     .limit(1)
     .then((result) =>
       result.map((product) => ({
         ...product,
-        isWishlisted:
-          product.isWishlisted === 1 && product.isWishlisted !== null,
+        isWishlisted: product.isWishlisted === 1,
       })),
     );
 
@@ -154,11 +173,19 @@ export async function getProduct(slug: string) {
   return product[0];
 }
 
-export async function existsWishlist(productVariantId: string) {
+export async function existsWishlist({
+  productVariantId,
+  userId,
+}: ExistsWishlistArgs) {
   const wishlist = await db
     .select()
     .from(wishlistsSchema)
-    .where(eq(wishlistsSchema.productVariantId, productVariantId));
+    .where(
+      and(
+        eq(wishlistsSchema.productVariantId, productVariantId),
+        eq(wishlistsSchema.userId, userId),
+      ),
+    );
 
   return wishlist.length > 0;
 }

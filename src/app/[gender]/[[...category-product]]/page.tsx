@@ -69,4 +69,4 @@ export default async function CategoryGenderPage(props: Props) {
 }
 
 // TODO: change for noStore() on _actions to be more specific when available
-export const fetchCache = "force-no-store";
+// export const fetchCache = "force-no-store";

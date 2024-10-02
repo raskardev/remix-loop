@@ -277,15 +277,16 @@ export const cartProductsRelations = relations(
   }),
 );
 
-export const wishlistsRelations = relations(
-  wishlistsSchema,
-  ({ one, many }) => ({
-    user: one(usersSchema, {
-      fields: [wishlistsSchema.userId],
-      references: [usersSchema.id],
-    }),
+export const usersRelations = relations(usersSchema, ({ many }) => ({
+  wishlists: many(wishlistsSchema),
+}));
+
+export const wishlistsRelations = relations(wishlistsSchema, ({ one }) => ({
+  user: one(usersSchema, {
+    fields: [wishlistsSchema.userId],
+    references: [usersSchema.id],
   }),
-);
+}));
 
 export type User = typeof usersSchema.$inferSelect;
 export type NewUser = typeof usersSchema.$inferInsert;

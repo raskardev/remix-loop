@@ -22,7 +22,10 @@ export const addProductToWishlist = validatedActionWithUser(
     const { id: userId } = user;
 
     if (action === "add") {
-      const exists = await existsWishlist(productVariantId);
+      const exists = await existsWishlist({
+        productVariantId,
+        userId,
+      });
 
       if (exists) {
         return { error: "Product already in wishlist. Please try again." };
