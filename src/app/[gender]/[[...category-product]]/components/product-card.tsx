@@ -21,12 +21,11 @@ export function ProductCard({ product }: Props) {
 
   const genderSlug = pathname.split("/")[1];
 
+  const href = `/${genderSlug}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
+
   return (
     <div>
-      <Link
-        href={`/${genderSlug}/${product.categorySlug}/${product.productSlug}`}
-        key={product.productVariantId}
-      >
+      <Link href={href} key={product.productVariantId}>
         <Image
           src={product.imageUrl}
           alt={product.name ?? ""}

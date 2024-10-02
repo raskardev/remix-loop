@@ -1,9 +1,13 @@
 import { verifyToken } from "@/lib/auth/session";
 import { db } from "@/lib/db/drizzle";
 import {
+  cartProductsSchema,
+  cartsSchema,
   categoriesSchema,
+  colorsSchema,
   productVariantsSchema,
   productsSchema,
+  sizesSchema,
   usersSchema,
   wishlistsSchema,
 } from "@/lib/db/schema";
@@ -32,6 +36,17 @@ type CreateDeleteWishlistArgs = {
 type ExistsWishlistArgs = {
   productVariantId: string;
   userId: string;
+};
+
+type AddToCartArgs = {
+  productVariantId: string;
+  cartId: string;
+  quantity: number;
+};
+
+type ExistsInCartArgs = {
+  productVariantId: string;
+  cartId: string;
 };
 
 export async function getUser() {
@@ -99,11 +114,12 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
   const products = await db
     .select({
       productVariantId: productVariantsSchema.id,
-      price: productVariantsSchema.price,
+      price: productsSchema.price,
       name: productsSchema.name,
       imageUrl: productVariantsSchema.imageUrl,
       productSlug: productsSchema.slug,
       categorySlug: categoriesSchema.slug,
+      colorName: colorsSchema.name,
       isWishlisted: isNotNull(wishlistsSchema.userId),
     })
     .from(productVariantsSchema)
@@ -122,6 +138,8 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
         eq(wishlistsSchema.userId, user?.id ?? ""),
       ),
     )
+    .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
+    .groupBy(productsSchema.id, productVariantsSchema.colorId)
     .where(and(...whereFilters))
     .then((result) =>
       result.map((product) => ({
@@ -138,13 +156,17 @@ export async function getProduct(slug: string) {
 
   const user = await getUser();
 
-  const product = await db
+  const products = await db
     .select({
-      name: productsSchema.name,
-      description: productsSchema.description,
-      price: productVariantsSchema.price,
-      imageUrl: productVariantsSchema.imageUrl,
+      productName: productsSchema.name,
+      productDescription: productsSchema.description,
       productVariantId: productVariantsSchema.id,
+      price: productsSchema.price,
+      stock: productVariantsSchema.stock,
+      imageUrl: productVariantsSchema.imageUrl,
+      sizeName: sizesSchema.name,
+      sizeId: sizesSchema.id,
+      colorName: colorsSchema.name,
       isWishlisted: isNotNull(wishlistsSchema.userId),
     })
     .from(productVariantsSchema)
@@ -159,8 +181,9 @@ export async function getProduct(slug: string) {
         eq(wishlistsSchema.userId, user?.id ?? ""),
       ),
     )
+    .leftJoin(sizesSchema, eq(productVariantsSchema.sizeId, sizesSchema.id))
+    .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
     .where(and(eq(productsSchema.slug, slug), eq(productsSchema.active, true)))
-    .limit(1)
     .then((result) =>
       result.map((product) => ({
         ...product,
@@ -168,9 +191,50 @@ export async function getProduct(slug: string) {
       })),
     );
 
-  if (product.length === 0) return null;
+  if (products.length === 0) return null;
 
-  return product[0];
+  const product: ProductDetail = {
+    name: products[0].productName ?? "",
+    description: products[0].productDescription ?? "",
+    variants: [],
+  };
+
+  const variantMap = new Map<string, ProductDetail["variants"][number]>();
+
+  for (const product of products) {
+    const {
+      productVariantId,
+      stock,
+      imageUrl,
+      price,
+      sizeId,
+      colorName,
+      sizeName,
+      isWishlisted,
+    } = product;
+    if (!colorName || !sizeName || !price || !sizeId) continue;
+
+    if (!variantMap.has(colorName)) {
+      variantMap.set(colorName, {
+        colorName,
+        imageUrl,
+        isWishlisted,
+        sizes: [],
+      });
+    }
+
+    variantMap.get(colorName)?.sizes.push({
+      name: sizeName,
+      sizeId,
+      productVariantId,
+      price,
+      stock,
+    });
+  }
+
+  product.variants = Array.from(variantMap.values());
+
+  return product;
 }
 
 export async function existsWishlist({
@@ -217,6 +281,95 @@ export async function deleteWishlist({
       and(
         eq(wishlistsSchema.userId, userId),
         eq(wishlistsSchema.productVariantId, productVariantId),
+      ),
+    );
+}
+
+export async function getCart() {
+  const user = await getUser();
+
+  if (!user) return null;
+
+  const card = await db
+    .select()
+    .from(cartsSchema)
+    .where(eq(cartsSchema.userId, user.id))
+    .limit(1);
+
+  if (card.length === 0) return null;
+
+  return card[0];
+}
+
+export async function getOrCreateCart(userId: string) {
+  const cart = await getCart();
+
+  if (cart) return cart;
+
+  const [createdCart] = await db
+    .insert(cartsSchema)
+    .values({
+      userId,
+    })
+    .returning();
+
+  if (!createdCart) return null;
+
+  return createdCart;
+}
+
+export async function getProductInCart({
+  productVariantId,
+  cartId,
+}: ExistsInCartArgs) {
+  const product = await db
+    .select()
+    .from(cartProductsSchema)
+    .where(
+      and(
+        eq(cartProductsSchema.productVariantId, productVariantId),
+        eq(cartProductsSchema.cartId, cartId),
+      ),
+    )
+    .limit(1);
+
+  if (product.length === 0) return null;
+
+  return product[0];
+}
+
+export async function addOrUpdateProductToCart({
+  productVariantId,
+  quantity,
+  cartId,
+}: AddToCartArgs) {
+  const productInCart = await getProductInCart({
+    productVariantId,
+    cartId,
+  });
+
+  if (!productInCart) {
+    const [createdCartProduct] = await db
+      .insert(cartProductsSchema)
+      .values({
+        productVariantId,
+        quantity,
+        cartId,
+      })
+      .returning();
+
+    if (!createdCartProduct) return null;
+
+    return createdCartProduct;
+  }
+
+  await db
+    .update(cartProductsSchema)
+    .set({ quantity: quantity + productInCart.quantity })
+    .where(
+      and(
+        eq(cartProductsSchema.productVariantId, productVariantId),
+        eq(cartProductsSchema.cartId, cartId),
       ),
     );
 }

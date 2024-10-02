@@ -56,6 +56,7 @@ export const productsSchema = sqliteTable("products", {
   })
     .notNull()
     .default("U"),
+  price: real("price").notNull(),
   active: integer("active", {
     mode: "boolean",
   }).default(false),
@@ -89,7 +90,7 @@ export const productVariantsSchema = sqliteTable("product_variants", {
   sizeId: text("size_id").references(() => sizesSchema.id),
   colorId: text("color_id").references(() => colorsSchema.id),
   stock: integer("stock").notNull(),
-  price: real("price").notNull(),
+  // price: real("price").notNull(),
   imageUrl: text("image_url").notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -148,7 +149,9 @@ export const cartsSchema = sqliteTable("carts", {
 
 export const cartProductsSchema = sqliteTable("cart_products", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
-  cartId: text("cart_id").references(() => cartsSchema.id),
+  cartId: text("cart_id")
+    .references(() => cartsSchema.id)
+    .notNull(),
   productVariantId: text("product_variant_id").references(
     () => productVariantsSchema.id,
   ),
