@@ -43,8 +43,7 @@ function ProductColorList({
           key={variant.colorName}
           href={`?color=${variant.colorName.toLowerCase()}`}
           className={cn("opacity-60", {
-            "opacity-100":
-              variant.sizes[0].productVariantId === selectedVariantId,
+            "opacity-100": variant.productVariantId === selectedVariantId,
           })}
         >
           <img
@@ -85,7 +84,7 @@ export function ProductDetail({ product }: Props) {
 
   const selectedProductVariantId = selectedVariant.sizes.find(
     (size) => size.sizeId === selectedSize,
-  )?.productVariantId;
+  )?.productVariantSizeId;
 
   const formattedPrice = priceFormatter.format(selectedVariant.sizes[0].price);
 
@@ -106,17 +105,14 @@ export function ProductDetail({ product }: Props) {
         {product.variants.length > 1 ? (
           <ProductColorList
             variants={product.variants}
-            selectedVariantId={selectedVariant.sizes[0].productVariantId}
+            selectedVariantId={selectedVariant.productVariantId}
           />
         ) : null}
         <form action={formAction}>
           <input
             type="hidden"
-            name="productVariantId"
-            value={
-              selectedProductVariantId ??
-              selectedVariant.sizes[0].productVariantId
-            }
+            name="productVariantSizeId"
+            value={selectedProductVariantId}
           />
           <input type="hidden" name="quantity" value={1} />
           <Select
@@ -147,10 +143,7 @@ export function ProductDetail({ product }: Props) {
               Add to cart
             </Button>
             <LikeButton
-              productVariantId={
-                selectedProductVariantId ??
-                selectedVariant.sizes[0].productVariantId
-              }
+              productVariantId={selectedVariant.productVariantId}
               isLiked={selectedVariant.isWishlisted}
             />
           </div>

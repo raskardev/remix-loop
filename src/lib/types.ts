@@ -4,10 +4,11 @@ type ProductDetail = {
   variants: {
     imageUrl: string;
     isWishlisted: boolean;
+    productVariantId: string;
     colorName: string;
     sizes: {
       sizeId: string;
-      productVariantId: string;
+      productVariantSizeId: string;
       name: string;
       price: number;
       stock: number;

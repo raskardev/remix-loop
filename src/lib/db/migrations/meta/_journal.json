@@ -57,6 +57,27 @@
 			"when": 1727863753119,
 			"tag": "0007_ordinary_hedge_knight",
 			"breakpoints": true
+		},
+		{
+			"idx": 8,
+			"version": "6",
+			"when": 1727878867035,
+			"tag": "0008_aberrant_grim_reaper",
+			"breakpoints": true
+		},
+		{
+			"idx": 9,
+			"version": "6",
+			"when": 1727879226537,
+			"tag": "0009_familiar_synch",
+			"breakpoints": true
+		},
+		{
+			"idx": 10,
+			"version": "6",
+			"when": 1727881810815,
+			"tag": "0010_yielding_tyrannus",
+			"breakpoints": true
 		}
 	]
 }

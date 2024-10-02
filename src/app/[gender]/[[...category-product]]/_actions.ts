@@ -58,14 +58,14 @@ export const addProductToWishlist = validatedActionWithUser(
 );
 
 const addProductToCartSchema = z.object({
-  productVariantId: z.string(),
+  productVariantSizeId: z.string(),
   quantity: z.coerce.number().min(1).max(10),
 });
 
 export const addToCart = validatedActionWithUser(
   addProductToCartSchema,
   async (data, _, user) => {
-    const { productVariantId, quantity } = data;
+    const { productVariantSizeId, quantity } = data;
     const { id: userId } = user;
 
     const cart = await getOrCreateCart(userId);
@@ -75,7 +75,7 @@ export const addToCart = validatedActionWithUser(
     const { id: cartId } = cart;
 
     await addOrUpdateProductToCart({
-      productVariantId,
+      productVariantSizeId,
       quantity,
       cartId,
     });

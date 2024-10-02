@@ -5,21 +5,14 @@ import {
   cartsSchema,
   categoriesSchema,
   colorsSchema,
+  productVariantSizes,
   productVariantsSchema,
   productsSchema,
   sizesSchema,
   usersSchema,
   wishlistsSchema,
 } from "@/lib/db/schema";
-import {
-  type SQL,
-  and,
-  eq,
-  gte,
-  inArray,
-  isNotNull,
-  isNull,
-} from "drizzle-orm";
+import { type SQL, and, eq, inArray, isNotNull, isNull } from "drizzle-orm";
 import { unstable_noStore as noStore } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -39,13 +32,13 @@ type ExistsWishlistArgs = {
 };
 
 type AddToCartArgs = {
-  productVariantId: string;
+  productVariantSizeId: string;
   cartId: string;
   quantity: number;
 };
 
 type ExistsInCartArgs = {
-  productVariantId: string;
+  productVariantSizeId: string;
   cartId: string;
 };
 
@@ -102,7 +95,8 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
   const categoryId = await getCategoryIdBySlug(category);
 
   const whereFilters: SQL[] = [
-    gte(productVariantsSchema.stock, 1),
+    // TODO: check stock
+    // gte(productVariantsSchema.stock, 1),
     inArray(productsSchema.targetGender, [gender, "U"]),
     eq(productsSchema.active, true),
   ];
@@ -161,8 +155,9 @@ export async function getProduct(slug: string) {
       productName: productsSchema.name,
       productDescription: productsSchema.description,
       productVariantId: productVariantsSchema.id,
+      productVariantSizeId: productVariantSizes.id,
       price: productsSchema.price,
-      stock: productVariantsSchema.stock,
+      stock: productVariantSizes.stock,
       imageUrl: productVariantsSchema.imageUrl,
       sizeName: sizesSchema.name,
       sizeId: sizesSchema.id,
@@ -181,7 +176,11 @@ export async function getProduct(slug: string) {
         eq(wishlistsSchema.userId, user?.id ?? ""),
       ),
     )
-    .leftJoin(sizesSchema, eq(productVariantsSchema.sizeId, sizesSchema.id))
+    .leftJoin(
+      productVariantSizes,
+      eq(productVariantsSchema.id, productVariantSizes.productVariantId),
+    )
+    .leftJoin(sizesSchema, eq(productVariantSizes.sizeId, sizesSchema.id))
     .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
     .where(and(eq(productsSchema.slug, slug), eq(productsSchema.active, true)))
     .then((result) =>
@@ -210,14 +209,24 @@ export async function getProduct(slug: string) {
       sizeId,
       colorName,
       sizeName,
+      productVariantSizeId,
       isWishlisted,
     } = product;
-    if (!colorName || !sizeName || !price || !sizeId) continue;
+    if (
+      !colorName ||
+      !sizeName ||
+      !price ||
+      !sizeId ||
+      !stock ||
+      !productVariantSizeId
+    )
+      continue;
 
     if (!variantMap.has(colorName)) {
       variantMap.set(colorName, {
         colorName,
         imageUrl,
+        productVariantId,
         isWishlisted,
         sizes: [],
       });
@@ -226,7 +235,7 @@ export async function getProduct(slug: string) {
     variantMap.get(colorName)?.sizes.push({
       name: sizeName,
       sizeId,
-      productVariantId,
+      productVariantSizeId,
       price,
       stock,
     });
@@ -319,7 +328,7 @@ export async function getOrCreateCart(userId: string) {
 }
 
 export async function getProductInCart({
-  productVariantId,
+  productVariantSizeId,
   cartId,
 }: ExistsInCartArgs) {
   const product = await db
@@ -327,7 +336,7 @@ export async function getProductInCart({
     .from(cartProductsSchema)
     .where(
       and(
-        eq(cartProductsSchema.productVariantId, productVariantId),
+        eq(cartProductsSchema.productVariantSizeId, productVariantSizeId),
         eq(cartProductsSchema.cartId, cartId),
       ),
     )
@@ -339,12 +348,12 @@ export async function getProductInCart({
 }
 
 export async function addOrUpdateProductToCart({
-  productVariantId,
+  productVariantSizeId,
   quantity,
   cartId,
 }: AddToCartArgs) {
   const productInCart = await getProductInCart({
-    productVariantId,
+    productVariantSizeId,
     cartId,
   });
 
@@ -352,7 +361,7 @@ export async function addOrUpdateProductToCart({
     const [createdCartProduct] = await db
       .insert(cartProductsSchema)
       .values({
-        productVariantId,
+        productVariantSizeId,
         quantity,
         cartId,
       })
@@ -368,7 +377,7 @@ export async function addOrUpdateProductToCart({
     .set({ quantity: quantity + productInCart.quantity })
     .where(
       and(
-        eq(cartProductsSchema.productVariantId, productVariantId),
+        eq(cartProductsSchema.productVariantSizeId, productVariantSizeId),
         eq(cartProductsSchema.cartId, cartId),
       ),
     );

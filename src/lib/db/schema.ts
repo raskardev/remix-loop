@@ -87,11 +87,21 @@ export const colorsSchema = sqliteTable("colors", {
 export const productVariantsSchema = sqliteTable("product_variants", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
   productId: text("product_id").references(() => productsSchema.id),
-  sizeId: text("size_id").references(() => sizesSchema.id),
   colorId: text("color_id").references(() => colorsSchema.id),
-  stock: integer("stock").notNull(),
-  // price: real("price").notNull(),
   imageUrl: text("image_url").notNull(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const productVariantSizes = sqliteTable("product_variant_sizes", {
+  id: text("id").default(sql`(uuid())`).primaryKey(),
+  productVariantId: text("product_variant_id")
+    .references(() => productVariantsSchema.id)
+    .notNull(),
+  sizeId: text("size_id")
+    .references(() => sizesSchema.id)
+    .notNull(),
+  stock: integer("stock").notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
@@ -152,9 +162,9 @@ export const cartProductsSchema = sqliteTable("cart_products", {
   cartId: text("cart_id")
     .references(() => cartsSchema.id)
     .notNull(),
-  productVariantId: text("product_variant_id").references(
-    () => productVariantsSchema.id,
-  ),
+  productVariantSizeId: text("product_variant_size_id")
+    .references(() => productVariantSizes.id)
+    .notNull(),
   quantity: integer("quantity").default(1).notNull(),
 });
 
@@ -200,9 +210,9 @@ export const categoryRelations = relations(
   }),
 );
 
-export const sizeRelations = relations(sizesSchema, ({ many }) => ({
-  productVariants: many(productVariantsSchema),
-}));
+// export const sizeRelations = relations(sizesSchema, ({ many }) => ({
+//   productVariants: many(productVariantsSchema),
+// }));
 
 export const colorRelations = relations(colorsSchema, ({ many }) => ({
   productVariants: many(productVariantsSchema),
@@ -214,10 +224,6 @@ export const productVariantRelations = relations(
     product: one(productsSchema, {
       fields: [productVariantsSchema.productId],
       references: [productsSchema.id],
-    }),
-    size: one(sizesSchema, {
-      fields: [productVariantsSchema.sizeId],
-      references: [sizesSchema.id],
     }),
     color: one(colorsSchema, {
       fields: [productVariantsSchema.colorId],

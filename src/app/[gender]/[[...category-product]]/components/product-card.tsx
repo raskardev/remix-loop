@@ -17,7 +17,7 @@ const priceFormatter = new Intl.NumberFormat("es-ES", {
 export function ProductCard({ product }: Props) {
   const pathname = usePathname();
 
-  const formattedPrice = priceFormatter.format(product.price);
+  const formattedPrice = priceFormatter.format(product.price ?? 0);
 
   const genderSlug = pathname.split("/")[1];
 
