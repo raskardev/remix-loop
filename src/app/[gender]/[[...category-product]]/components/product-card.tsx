@@ -1,5 +1,7 @@
 import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
+import { Badge } from "@/components/ui/badge";
 import type { getProducts } from "@/lib/db/queries";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,6 +21,10 @@ export function ProductCard({ product }: Props) {
 
   const href = `/${genderPath}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
 
+  const isNew =
+    new Date(product.createdAt).getTime() >=
+    new Date().getTime() - 10 * 24 * 60 * 60 * 1000;
+
   return (
     <div>
       <Link href={href} key={product.productVariantId}>
@@ -29,10 +35,13 @@ export function ProductCard({ product }: Props) {
           height={999}
         />
       </Link>
-      <div className="mt-3 relative">
-        <span className="block text-center text-sm">{product.name}</span>
-        <span className="block text-center font-bold">{formattedPrice}</span>
-        <div className="absolute top-0 right-0 z-50">
+      <div className="mt-3 flex items-center justify-between px-3">
+        <Badge className={cn(isNew ? "visible" : "invisible")}>NEW</Badge>
+        <div>
+          <span className="block text-center text-sm">{product.name}</span>
+          <span className="block text-center font-bold">{formattedPrice}</span>
+        </div>
+        <div className="">
           <LikeButton
             productVariantId={product.productVariantId}
             isLiked={product.isWishlisted}

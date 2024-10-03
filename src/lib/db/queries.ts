@@ -135,6 +135,7 @@ export async function getProducts({
       productSlug: productsSchema.slug,
       categorySlug: categoriesSchema.slug,
       colorName: colorsSchema.name,
+      createdAt: productVariantsSchema.createdAt,
       isWishlisted: isNotNull(wishlistsSchema.userId),
     })
     .from(productVariantsSchema)

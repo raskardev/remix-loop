@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const EXCLUDED_PATHS = ["/sign-in", "/sign-up"];
 
@@ -23,14 +23,23 @@ type Product = Awaited<
 >["products"][number];
 
 export function SearchDialog() {
-  const [products, setProducts] = useState<Product[] | undefined>();
-  const [searchInput, setSearchInput] = useState("");
   const pathname = usePathname();
 
   const show = EXCLUDED_PATHS.includes(pathname);
   if (show) return null;
 
+  const [products, setProducts] = useState<Product[] | undefined>();
+  const [searchInput, setSearchInput] = useState("");
+  const [open, setOpen] = useState(false);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   function handleOpenChange(open: boolean) {
+    setOpen(open);
+
     if (!open) {
       setSearchInput("");
       setProducts(undefined);
@@ -52,7 +61,7 @@ export function SearchDialog() {
   }
 
   return (
-    <Dialog onOpenChange={handleOpenChange}>
+    <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogTrigger asChild>
         <Button
           className="w-52 justify-start space-x-4 rounded-2xl border-foreground"

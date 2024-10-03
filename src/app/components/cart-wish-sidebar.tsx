@@ -1,6 +1,7 @@
 import { addRemoveProductToWishlist } from "@/app/[gender]/[[...category-product]]/_actions";
 import { DeleteProductButton } from "@/app/[gender]/[[...category-product]]/components/delete-product-button";
 import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -117,9 +118,9 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
       <SheetTrigger className="relative">
         <ShoppingBasket />
         {totalItems > 0 ? (
-          <span className="absolute -bottom-2 -right-2 rounded-full bg-muted-foreground font-bold text-sm size-5 text-muted block">
+          <Badge className="absolute -bottom-2 -right-2 rounded-full size-5 flex items-center justify-center">
             {totalItems}
-          </span>
+          </Badge>
         ) : null}
       </SheetTrigger>
       <SheetContent>
