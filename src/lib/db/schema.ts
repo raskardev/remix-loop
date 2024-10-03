@@ -52,10 +52,8 @@ export const productsSchema = sqliteTable("products", {
     .default(""),
   targetGender: text("target_gender", {
     length: 1,
-    enum: ["M", "F", "U"],
-  })
-    .notNull()
-    .default("U"),
+    enum: ["M", "F"],
+  }).notNull(),
   price: real("price").notNull(),
   active: integer("active", {
     mode: "boolean",

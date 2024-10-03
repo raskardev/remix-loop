@@ -97,7 +97,7 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
   const whereFilters: SQL[] = [
     // TODO: check stock
     // gte(productVariantsSchema.stock, 1),
-    inArray(productsSchema.targetGender, [gender, "U"]),
+    inArray(productsSchema.targetGender, [gender]),
     eq(productsSchema.active, true),
   ];
 
@@ -294,6 +294,40 @@ export async function deleteWishlist({
     );
 }
 
+export async function getWishlistItems() {
+  const user = await getUser();
+  if (!user) return [];
+
+  const wishlist = await db
+    .select({
+      productVariantId: productVariantsSchema.id,
+      imageUrl: productVariantsSchema.imageUrl,
+      name: productsSchema.name,
+      price: productsSchema.price,
+      gender: productsSchema.targetGender,
+      productSlug: productsSchema.slug,
+      categorySlug: categoriesSchema.slug,
+      colorName: colorsSchema.name,
+    })
+    .from(wishlistsSchema)
+    .leftJoin(
+      productVariantsSchema,
+      eq(wishlistsSchema.productVariantId, productVariantsSchema.id),
+    )
+    .leftJoin(
+      productsSchema,
+      eq(productVariantsSchema.productId, productsSchema.id),
+    )
+    .leftJoin(
+      categoriesSchema,
+      eq(productsSchema.categoryId, categoriesSchema.id),
+    )
+    .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
+    .where(eq(wishlistsSchema.userId, user.id));
+
+  return wishlist;
+}
+
 export async function getCart() {
   const user = await getUser();
 
@@ -379,6 +413,77 @@ export async function addOrUpdateProductToCart({
       and(
         eq(cartProductsSchema.productVariantSizeId, productVariantSizeId),
         eq(cartProductsSchema.cartId, cartId),
+      ),
+    );
+}
+
+export async function getShoppingBagItems() {
+  const cart = await getCart();
+  if (!cart) return [];
+
+  const products = await db
+    .select({
+      cartProductId: cartProductsSchema.id,
+      quantity: cartProductsSchema.quantity,
+      sizeName: sizesSchema.name,
+      productName: productsSchema.name,
+      price: productsSchema.price,
+      colorName: colorsSchema.name,
+      imageUrl: productVariantsSchema.imageUrl,
+      isWishlisted: isNotNull(wishlistsSchema.userId),
+      productVariantId: productVariantsSchema.id,
+      gender: productsSchema.targetGender,
+      productSlug: productsSchema.slug,
+      categorySlug: categoriesSchema.slug,
+    })
+    .from(cartProductsSchema)
+    .leftJoin(
+      productVariantSizes,
+      eq(cartProductsSchema.productVariantSizeId, productVariantSizes.id),
+    )
+    .leftJoin(
+      productVariantsSchema,
+      eq(productVariantSizes.productVariantId, productVariantsSchema.id),
+    )
+    .leftJoin(
+      wishlistsSchema,
+      and(
+        eq(productVariantsSchema.id, wishlistsSchema.productVariantId),
+        eq(wishlistsSchema.userId, cart.userId ?? ""),
+      ),
+    )
+    .leftJoin(
+      productsSchema,
+      eq(productVariantsSchema.productId, productsSchema.id),
+    )
+    .leftJoin(
+      categoriesSchema,
+      eq(productsSchema.categoryId, categoriesSchema.id),
+    )
+    .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
+    .leftJoin(sizesSchema, eq(productVariantSizes.sizeId, sizesSchema.id))
+    .where(eq(cartProductsSchema.cartId, cart.id))
+    .then((result) =>
+      result.map((product) => ({
+        ...product,
+        isWishlisted: product.isWishlisted === 1,
+      })),
+    );
+
+  return products;
+}
+
+export async function removeProductFromCart(cartProductId: string) {
+  const cart = await getCart();
+
+  if (!cart) return null;
+
+  await db
+    .delete(cartProductsSchema)
+    .where(
+      and(
+        eq(cartProductsSchema.id, cartProductId),
+        eq(cartProductsSchema.cartId, cart.id),
       ),
     );
 }

@@ -7,18 +7,19 @@ import {
   deleteWishlist,
   existsWishlist,
   getOrCreateCart,
+  removeProductFromCart,
 } from "@/lib/db/queries";
 import {} from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-const addProductToWishlistSchema = z.object({
+const addRemoveProductToWishlistSchema = z.object({
   productVariantId: z.string(),
   action: z.enum(["add", "remove"]),
 });
 
-export const addProductToWishlist = validatedActionWithUser(
-  addProductToWishlistSchema,
+export const addRemoveProductToWishlist = validatedActionWithUser(
+  addRemoveProductToWishlistSchema,
   async (data, _, user) => {
     const { productVariantId, action } = data;
     const { id: userId } = user;
@@ -81,8 +82,25 @@ export const addToCart = validatedActionWithUser(
     });
 
     // TODO: change to more specific path
-    // revalidatePath("/:gender");
+    revalidatePath("/:gender");
 
     return { success: "Product added to cart successfully." };
+  },
+);
+
+const removeFromCartSchema = z.object({
+  cartProductId: z.string(),
+});
+
+export const removeFromCart = validatedActionWithUser(
+  removeFromCartSchema,
+  async (data, _, user) => {
+    const { cartProductId } = data;
+
+    await removeProductFromCart(cartProductId);
+
+    revalidatePath("/:gender");
+
+    return { success: "Product removed from cart successfully." };
   },
 );

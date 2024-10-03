@@ -1,5 +1,5 @@
 "use client";
-import { addProductToWishlist } from "@/app/[gender]/[[...category-product]]/_actions";
+import { addRemoveProductToWishlist } from "@/app/[gender]/[[...category-product]]/_actions";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 
@@ -9,12 +9,12 @@ type Props = {
 };
 
 export function LikeButton({ productVariantId, isLiked }: Props) {
-  async function handleOnClick() {
+  async function handleClick() {
     const formData = new FormData();
     formData.append("productVariantId", productVariantId);
     formData.append("action", isLiked ? "remove" : "add");
 
-    await addProductToWishlist(
+    await addRemoveProductToWishlist(
       {
         error: "",
         success: "",
@@ -29,7 +29,7 @@ export function LikeButton({ productVariantId, isLiked }: Props) {
       variant="outline"
       className="rounded-full p-2 size-10"
       type="button"
-      onClick={handleOnClick}
+      onClick={handleClick}
     >
       <Heart className={isLiked ? "text-red-500 fill-red-500" : ""} />
     </Button>
