@@ -12,13 +12,23 @@ import {
   usersSchema,
   wishlistsSchema,
 } from "@/lib/db/schema";
-import { type SQL, and, eq, inArray, isNotNull, isNull } from "drizzle-orm";
+import {
+  type SQL,
+  and,
+  eq,
+  gte,
+  inArray,
+  isNotNull,
+  isNull,
+  like,
+} from "drizzle-orm";
 import { unstable_noStore as noStore } from "next/cache";
 import { cookies } from "next/headers";
 
 type GetProductsArgs = {
-  gender: "M" | "F";
-  category: string;
+  gender?: "M" | "F";
+  category?: string;
+  searchTerm?: string;
 };
 
 type CreateDeleteWishlistArgs = {
@@ -88,21 +98,31 @@ async function getCategoryIdBySlug(slug?: string) {
   return category[0].id;
 }
 
-export async function getProducts({ gender, category }: GetProductsArgs) {
+export async function getProducts({
+  gender,
+  category,
+  searchTerm,
+}: GetProductsArgs) {
   noStore();
 
   const user = await getUser();
   const categoryId = await getCategoryIdBySlug(category);
 
   const whereFilters: SQL[] = [
-    // TODO: check stock
-    // gte(productVariantsSchema.stock, 1),
-    inArray(productsSchema.targetGender, [gender]),
+    gte(productVariantSizes.stock, 1),
     eq(productsSchema.active, true),
   ];
 
+  if (gender) {
+    whereFilters.push(inArray(productsSchema.targetGender, [gender]));
+  }
+
   if (categoryId) {
     whereFilters.push(eq(productsSchema.categoryId, categoryId));
+  }
+
+  if (searchTerm) {
+    whereFilters.push(like(productsSchema.name, `%${searchTerm}%`));
   }
 
   const products = await db
@@ -133,6 +153,10 @@ export async function getProducts({ gender, category }: GetProductsArgs) {
       ),
     )
     .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
+    .leftJoin(
+      productVariantSizes,
+      eq(productVariantsSchema.id, productVariantSizes.productVariantId),
+    )
     .groupBy(productsSchema.id, productVariantsSchema.colorId)
     .where(and(...whereFilters))
     .then((result) =>

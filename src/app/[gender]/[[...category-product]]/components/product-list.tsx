@@ -5,7 +5,7 @@ type Props = {
   products: Awaited<ReturnType<typeof getProducts>>;
 };
 
-export async function ProductList({ products }: Props) {
+export function ProductList({ products }: Props) {
   return (
     <div className="grid grid-cols-4 xl:grid-cols-5 gap-4 mt-6">
       {products.map((product) => (

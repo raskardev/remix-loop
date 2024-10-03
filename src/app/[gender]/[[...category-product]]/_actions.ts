@@ -1,12 +1,16 @@
 "use server";
 
-import { validatedActionWithUser } from "@/lib/auth/middleware";
+import {
+  validatedAction,
+  validatedActionWithUser,
+} from "@/lib/auth/middleware";
 import {
   addOrUpdateProductToCart,
   createWishlist,
   deleteWishlist,
   existsWishlist,
   getOrCreateCart,
+  getProducts,
   removeProductFromCart,
 } from "@/lib/db/queries";
 import {} from "drizzle-orm";
@@ -102,5 +106,24 @@ export const removeFromCart = validatedActionWithUser(
     revalidatePath("/:gender");
 
     return { success: "Product removed from cart successfully." };
+  },
+);
+
+const getProductsByNameSchema = z.object({
+  name: z.string().min(3),
+});
+
+export const getProductsByName = validatedAction(
+  getProductsByNameSchema,
+  async (data) => {
+    const { name } = data;
+
+    const products = await getProducts({
+      searchTerm: name,
+    });
+
+    return {
+      products,
+    };
   },
 );
