@@ -1,9 +1,7 @@
-"use client";
 import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
 import type { getProducts } from "@/lib/db/queries";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 type Props = {
   product: Awaited<ReturnType<typeof getProducts>>[number];
@@ -15,13 +13,11 @@ const priceFormatter = new Intl.NumberFormat("es-ES", {
 });
 
 export function ProductCard({ product }: Props) {
-  const pathname = usePathname();
-
   const formattedPrice = priceFormatter.format(product.price ?? 0);
 
-  const genderSlug = pathname.split("/")[1];
+  const genderPath = product.gender === "M" ? "man" : "woman";
 
-  const href = `/${genderSlug}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
+  const href = `/${genderPath}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
 
   return (
     <div>

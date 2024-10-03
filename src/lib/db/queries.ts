@@ -130,6 +130,7 @@ export async function getProducts({
       productVariantId: productVariantsSchema.id,
       price: productsSchema.price,
       name: productsSchema.name,
+      gender: productsSchema.targetGender,
       imageUrl: productVariantsSchema.imageUrl,
       productSlug: productsSchema.slug,
       categorySlug: categoriesSchema.slug,
