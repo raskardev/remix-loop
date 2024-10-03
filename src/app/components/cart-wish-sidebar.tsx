@@ -107,10 +107,20 @@ function WishlistItem({ product }: WishlistItemProps) {
 }
 
 export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
+  const totalItems = shoppingBagItems.reduce(
+    (acc, item) => acc + item.quantity,
+    0,
+  );
+
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger className="relative">
         <ShoppingBasket />
+        {totalItems > 0 ? (
+          <span className="absolute -bottom-2 -right-2 rounded-full bg-muted-foreground font-bold text-sm size-5 text-muted block">
+            {totalItems}
+          </span>
+        ) : null}
       </SheetTrigger>
       <SheetContent>
         <Tabs defaultValue="shopping-bag" className="mt-4">
