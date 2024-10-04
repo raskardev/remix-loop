@@ -8,6 +8,12 @@ type Props = {
     gender: string;
     "category-product": string[];
   };
+  searchParams: {
+    sort: string;
+    color: string;
+    price_min: string;
+    price_max: string;
+  };
 };
 
 export default async function CategoryGenderPage(props: Props) {
@@ -18,6 +24,10 @@ export default async function CategoryGenderPage(props: Props) {
     const products = await getProducts({
       gender: props.params.gender === "man" ? "M" : "F",
       category: categorySlug,
+      orderBy: props.searchParams.sort,
+      color: props.searchParams.color,
+      priceMin: props.searchParams.price_min,
+      priceMax: props.searchParams.price_max,
     });
 
     return <ProductList products={products} />;

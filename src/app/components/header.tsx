@@ -2,6 +2,8 @@ import { CategorySelector } from "@/app/components/category-selector";
 import { SearchDialog } from "@/app/components/search-dialog";
 import { UserButton } from "@/app/components/user-button";
 import {
+  getColors,
+  getLowerAndUpperPrices,
   getMainCategories,
   getShoppingBagItems,
   getWishlistItems,
@@ -13,6 +15,8 @@ export async function Header() {
   const categories = await getMainCategories();
   const shoppingBagItems = await getShoppingBagItems();
   const wishlistItems = await getWishlistItems();
+  const colors = await getColors();
+  const minMaxPrices = await getLowerAndUpperPrices();
 
   return (
     <header className="sticky top-0 z-50 bg-transparent w-full px-12">
@@ -32,7 +36,11 @@ export async function Header() {
           />
         </div>
       </div>
-      <CategorySelector categories={categories} />
+      <CategorySelector
+        categories={categories}
+        colors={colors}
+        minMaxPrices={minMaxPrices}
+      />
     </header>
   );
 }

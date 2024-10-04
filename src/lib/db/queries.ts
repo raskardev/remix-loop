@@ -15,12 +15,17 @@ import {
 import {
   type SQL,
   and,
+  asc,
+  desc,
   eq,
   gte,
   inArray,
   isNotNull,
   isNull,
   like,
+  lte,
+  max,
+  min,
 } from "drizzle-orm";
 import { unstable_noStore as noStore } from "next/cache";
 import { cookies } from "next/headers";
@@ -29,6 +34,10 @@ type GetProductsArgs = {
   gender?: "M" | "F";
   category?: string;
   searchTerm?: string;
+  orderBy?: string;
+  color?: string;
+  priceMin?: string;
+  priceMax?: string;
 };
 
 type CreateDeleteWishlistArgs = {
@@ -102,6 +111,10 @@ export async function getProducts({
   gender,
   category,
   searchTerm,
+  orderBy,
+  color,
+  priceMin,
+  priceMax,
 }: GetProductsArgs) {
   noStore();
 
@@ -123,6 +136,18 @@ export async function getProducts({
 
   if (searchTerm) {
     whereFilters.push(like(productsSchema.name, `%${searchTerm}%`));
+  }
+
+  if (color) {
+    whereFilters.push(like(colorsSchema.name, `%${color}%`));
+  }
+
+  if (priceMin) {
+    whereFilters.push(gte(productsSchema.price, Number(priceMin)));
+  }
+
+  if (priceMax) {
+    whereFilters.push(lte(productsSchema.price, Number(priceMax)));
   }
 
   const products = await db
@@ -161,6 +186,11 @@ export async function getProducts({
     )
     .groupBy(productsSchema.id, productVariantsSchema.colorId)
     .where(and(...whereFilters))
+    .orderBy(
+      orderBy === "price_asc"
+        ? asc(productsSchema.price)
+        : desc(productsSchema.price),
+    )
     .then((result) =>
       result.map((product) => ({
         ...product,
@@ -512,4 +542,33 @@ export async function removeProductFromCart(cartProductId: string) {
         eq(cartProductsSchema.cartId, cart.id),
       ),
     );
+}
+
+export async function getColors() {
+  const colors = await db
+    .selectDistinct({ name: colorsSchema.name })
+    .from(colorsSchema)
+    .innerJoin(
+      productVariantsSchema,
+      eq(colorsSchema.id, productVariantsSchema.colorId),
+    );
+
+  return colors.map((color) => color.name);
+}
+
+export async function getLowerAndUpperPrices() {
+  const prices = await db
+    .select({
+      max: max(productsSchema.price),
+      min: min(productsSchema.price),
+    })
+    .from(productsSchema)
+    .limit(1);
+
+  if (prices.length === 0 || !prices[0].min || !prices[0].max) return null;
+
+  return {
+    max: prices[0].max,
+    min: prices[0].min,
+  };
 }

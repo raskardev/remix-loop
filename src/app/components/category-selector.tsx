@@ -1,5 +1,7 @@
 "use client";
 
+import { FilterSheet } from "@/app/components/filter-sheet";
+import type { getLowerAndUpperPrices } from "@/lib/db/queries";
 import type { Category } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -7,6 +9,8 @@ import { usePathname } from "next/navigation";
 
 type Props = {
   categories: Category[];
+  colors: string[];
+  minMaxPrices: Awaited<ReturnType<typeof getLowerAndUpperPrices>>;
 };
 
 const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account"];
@@ -36,7 +40,7 @@ function CategoryLink({ category }: { category: Category }) {
   );
 }
 
-export function CategorySelector({ categories }: Props) {
+export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
   const pathname = usePathname();
 
   const show =
@@ -52,13 +56,18 @@ export function CategorySelector({ categories }: Props) {
   };
 
   return (
-    <div className="h-12">
+    <div className="h-12 relative">
       <ul className="flex space-x-4 items-center justify-center">
         <CategoryLink category={allItems} />
         {categories.map((category) => (
           <CategoryLink key={category.id} category={category} />
         ))}
       </ul>
+      <FilterSheet
+        triggerClassName="absolute right-0 top-0 h-12"
+        colors={colors}
+        minMaxPrices={minMaxPrices}
+      />
     </div>
   );
 }
