@@ -1,7 +1,7 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "e98b638b-b305-4b07-884f-0a9448f8685b",
+	"id": "9467914c-40ff-4db5-99d8-55a9bd30de6d",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"cart_products": {
@@ -19,14 +19,14 @@
 					"name": "cart_id",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
-				"product_variant_id": {
-					"name": "product_variant_id",
+				"product_variant_size_id": {
+					"name": "product_variant_size_id",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"quantity": {
@@ -49,11 +49,11 @@
 					"onDelete": "no action",
 					"onUpdate": "no action"
 				},
-				"cart_products_product_variant_id_product_variants_id_fk": {
-					"name": "cart_products_product_variant_id_product_variants_id_fk",
+				"cart_products_product_variant_size_id_product_variant_sizes_id_fk": {
+					"name": "cart_products_product_variant_size_id_product_variant_sizes_id_fk",
 					"tableFrom": "cart_products",
-					"tableTo": "product_variants",
-					"columnsFrom": ["product_variant_id"],
+					"tableTo": "product_variant_sizes",
+					"columnsFrom": ["product_variant_size_id"],
 					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
@@ -113,6 +113,21 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
+				},
+				"parent_id": {
+					"name": "parent_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"active": {
+					"name": "active",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": false
 				},
 				"slug": {
 					"name": "slug",
@@ -335,6 +350,79 @@
 			"compositePrimaryKeys": {},
 			"uniqueConstraints": {}
 		},
+		"product_variant_sizes": {
+			"name": "product_variant_sizes",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(uuid())"
+				},
+				"product_variant_id": {
+					"name": "product_variant_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"size_id": {
+					"name": "size_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"stock": {
+					"name": "stock",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "CURRENT_TIMESTAMP"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "CURRENT_TIMESTAMP"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"product_variant_sizes_product_variant_id_product_variants_id_fk": {
+					"name": "product_variant_sizes_product_variant_id_product_variants_id_fk",
+					"tableFrom": "product_variant_sizes",
+					"tableTo": "product_variants",
+					"columnsFrom": ["product_variant_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"product_variant_sizes_size_id_sizes_id_fk": {
+					"name": "product_variant_sizes_size_id_sizes_id_fk",
+					"tableFrom": "product_variant_sizes",
+					"tableTo": "sizes",
+					"columnsFrom": ["size_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
 		"product_variants": {
 			"name": "product_variants",
 			"columns": {
@@ -353,13 +441,6 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"size_id": {
-					"name": "size_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
 				"color_id": {
 					"name": "color_id",
 					"type": "text",
@@ -367,16 +448,9 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"stock": {
-					"name": "stock",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"price": {
-					"name": "price",
-					"type": "real",
+				"image_url": {
+					"name": "image_url",
+					"type": "text",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
@@ -405,15 +479,6 @@
 					"tableFrom": "product_variants",
 					"tableTo": "products",
 					"columnsFrom": ["product_id"],
-					"columnsTo": ["id"],
-					"onDelete": "no action",
-					"onUpdate": "no action"
-				},
-				"product_variants_size_id_sizes_id_fk": {
-					"name": "product_variants_size_id_sizes_id_fk",
-					"tableFrom": "product_variants",
-					"tableTo": "sizes",
-					"columnsFrom": ["size_id"],
 					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
@@ -460,7 +525,29 @@
 					"name": "category_id",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text(50)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "''"
+				},
+				"target_gender": {
+					"name": "target_gender",
+					"type": "text(1)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"price": {
+					"name": "price",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"active": {
@@ -745,11 +832,11 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"product_id": {
-					"name": "product_id",
+				"product_variant_id": {
+					"name": "product_variant_id",
 					"type": "text",
 					"primaryKey": false,
-					"notNull": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"created_at": {
@@ -772,11 +859,11 @@
 					"onDelete": "no action",
 					"onUpdate": "no action"
 				},
-				"wishlists_product_id_products_id_fk": {
-					"name": "wishlists_product_id_products_id_fk",
+				"wishlists_product_variant_id_product_variants_id_fk": {
+					"name": "wishlists_product_variant_id_product_variants_id_fk",
 					"tableFrom": "wishlists",
-					"tableTo": "products",
-					"columnsFrom": ["product_id"],
+					"tableTo": "product_variants",
+					"columnsFrom": ["product_variant_id"],
 					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
