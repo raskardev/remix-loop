@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description: "Loop the store for modern people",
     images: [
       {
-        url: `${process.env.URL}/og.png`,
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "Loop",
@@ -62,6 +62,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const userPromise = getUser();
+
+  console.log(process.env.NEXT_PUBLIC_URL);
 
   return (
     <html lang="en">
