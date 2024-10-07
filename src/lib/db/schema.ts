@@ -303,3 +303,4 @@ export type Product = typeof productsSchema.$inferSelect;
 export type NewProduct = typeof productsSchema.$inferInsert;
 export type ProductVariant = typeof productVariantsSchema.$inferSelect;
 export type NewProductVariant = typeof productVariantsSchema.$inferInsert;
+export type NewShippingAddress = typeof shippingAddressesSchema.$inferInsert;

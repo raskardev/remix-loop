@@ -1,6 +1,7 @@
 import { verifyToken } from "@/lib/auth/session";
 import { db } from "@/lib/db/drizzle";
 import {
+  type NewShippingAddress,
   cartProductsSchema,
   cartsSchema,
   categoriesSchema,
@@ -8,6 +9,7 @@ import {
   productVariantSizes,
   productVariantsSchema,
   productsSchema,
+  shippingAddressesSchema,
   sizesSchema,
   usersSchema,
   wishlistsSchema,
@@ -59,6 +61,11 @@ type AddToCartArgs = {
 type ExistsInCartArgs = {
   productVariantSizeId: string;
   cartId: string;
+};
+
+type AddOrUpdateShippingAddress = {
+  shippingAddress: NewShippingAddress;
+  type: "add" | "edit";
 };
 
 export async function getUser() {
@@ -579,4 +586,75 @@ export async function getLowerAndUpperPrices() {
     max: prices[0].max,
     min: prices[0].min,
   };
+}
+
+export async function getShippingAddresses() {
+  const user = await getUser();
+  if (!user) return [];
+
+  const shippingAddresses = await db
+    .select({
+      id: shippingAddressesSchema.id,
+      name: shippingAddressesSchema.name,
+      surnames: shippingAddressesSchema.surnames,
+      country: shippingAddressesSchema.country,
+      phoneNumber: shippingAddressesSchema.phoneNumber,
+      address: shippingAddressesSchema.address,
+      additionalAddress: shippingAddressesSchema.additionalAddress,
+      remarks: shippingAddressesSchema.remarks,
+      postalCode: shippingAddressesSchema.postalCode,
+      population: shippingAddressesSchema.population,
+      province: shippingAddressesSchema.province,
+    })
+    .from(shippingAddressesSchema)
+    .where(eq(shippingAddressesSchema.userId, user.id));
+
+  return shippingAddresses;
+}
+
+export async function addOrUpdateShippingAddress({
+  shippingAddress,
+  type,
+}: AddOrUpdateShippingAddress) {
+  if (type === "add") {
+    const { id, ...shippingAddressWithoutId } = shippingAddress;
+
+    const [createdAddress] = await db
+      .insert(shippingAddressesSchema)
+      .values(shippingAddressWithoutId)
+      .returning();
+
+    if (!createdAddress) return null;
+
+    return createdAddress;
+  }
+
+  const [updatedAddress] = await db
+    .update(shippingAddressesSchema)
+    .set(shippingAddress)
+    .where(
+      and(
+        eq(shippingAddressesSchema.id, shippingAddress.id ?? ""),
+        eq(shippingAddressesSchema.userId, shippingAddress.userId ?? ""),
+      ),
+    )
+    .returning();
+
+  if (!updatedAddress) return null;
+
+  return updatedAddress;
+}
+
+export async function deleteShippingAddress(
+  shippingAddressId: string,
+  userId: string,
+) {
+  await db
+    .delete(shippingAddressesSchema)
+    .where(
+      and(
+        eq(shippingAddressesSchema.id, shippingAddressId),
+        eq(shippingAddressesSchema.userId, userId),
+      ),
+    );
 }
