@@ -6,22 +6,26 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { getShoppingBagItems, getWishlistItems } from "@/lib/db/queries";
+import type {} from "@/lib/db/queries";
+import type {
+  ShoppingBagItem as ShoppingBagItemType,
+  WishlistItem as WishlistItemType,
+} from "@/lib/types";
 
 import { Heart, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
-  shoppingBagItems: Awaited<ReturnType<typeof getShoppingBagItems>>;
-  wishlistItems: Awaited<ReturnType<typeof getWishlistItems>>;
+  shoppingBagItems: ShoppingBagItemType[];
+  wishlistItems: WishlistItemType[];
 };
 
 type ShoppingBagItemProps = {
-  product: Awaited<ReturnType<typeof getShoppingBagItems>>[number];
+  product: ShoppingBagItemType;
 };
 
 type WishlistItemProps = {
-  product: Awaited<ReturnType<typeof getWishlistItems>>[number];
+  product: WishlistItemType;
 };
 
 const priceFormatter = new Intl.NumberFormat("es-ES", {

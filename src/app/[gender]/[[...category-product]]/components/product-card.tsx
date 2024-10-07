@@ -1,12 +1,12 @@
 import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
 import { Badge } from "@/components/ui/badge";
-import type { getProducts } from "@/lib/db/queries";
+import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  product: Awaited<ReturnType<typeof getProducts>>[number];
+  product: Product;
 };
 
 const priceFormatter = new Intl.NumberFormat("es-ES", {

@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
-import type { getLowerAndUpperPrices } from "@/lib/db/queries";
+import type { MinMaxPrices } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Filter } from "lucide-react";
@@ -19,7 +19,7 @@ import { useState } from "react";
 type Props = {
   triggerClassName?: string;
   colors: string[];
-  minMaxPrices: Awaited<ReturnType<typeof getLowerAndUpperPrices>>;
+  minMaxPrices: MinMaxPrices;
 };
 
 const priceFormatter = new Intl.NumberFormat("es-ES", {

@@ -1,4 +1,14 @@
-type ProductDetail = {
+import type { getProductsByName } from "@/app/[gender]/[[...category-product]]/_actions";
+import type {
+  getLowerAndUpperPrices,
+  getMainCategories,
+  getProducts,
+  getShippingAddresses,
+  getShoppingBagItems,
+  getWishlistItems,
+} from "@/lib/db/queries";
+
+export type ProductDetail = {
   name: string;
   description: string;
   variants: {
@@ -15,3 +25,23 @@ type ProductDetail = {
     }[];
   }[];
 };
+
+export type ShippingAddress = Awaited<
+  ReturnType<typeof getShippingAddresses>
+>[number];
+
+export type Product = Awaited<ReturnType<typeof getProducts>>[number];
+
+export type ProductByName = Awaited<
+  ReturnType<typeof getProductsByName>
+>["products"][number];
+
+export type ShoppingBagItem = Awaited<
+  ReturnType<typeof getShoppingBagItems>
+>[number];
+
+export type WishlistItem = Awaited<ReturnType<typeof getWishlistItems>>[number];
+
+export type Category = Awaited<ReturnType<typeof getMainCategories>>[number];
+
+export type MinMaxPrices = Awaited<ReturnType<typeof getLowerAndUpperPrices>>;

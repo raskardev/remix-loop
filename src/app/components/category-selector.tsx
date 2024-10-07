@@ -1,20 +1,15 @@
 "use client";
 
 import { FilterSheet } from "@/app/components/filter-sheet";
-import type {
-  getLowerAndUpperPrices,
-  getMainCategories,
-} from "@/lib/db/queries";
+import type { Category, MinMaxPrices } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type Category = Awaited<ReturnType<typeof getMainCategories>>[number];
-
 type Props = {
   categories: Category[];
   colors: string[];
-  minMaxPrices: Awaited<ReturnType<typeof getLowerAndUpperPrices>>;
+  minMaxPrices: MinMaxPrices;
 };
 
 const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account"];

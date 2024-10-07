@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { ActionState } from "@/lib/auth/middleware";
+import type { ProductDetail as ProductDetailType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,11 +20,11 @@ import { useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 
 type Props = {
-  product: ProductDetail;
+  product: ProductDetailType;
 };
 
 type ProductColorListProps = {
-  variants: ProductDetail["variants"];
+  variants: ProductDetailType["variants"];
   selectedVariantId: string;
 };
 

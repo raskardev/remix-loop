@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ActionState } from "@/lib/auth/middleware";
-import type { getShippingAddresses } from "@/lib/db/queries";
+import type { ShippingAddress } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import {
@@ -37,13 +37,13 @@ import {
 } from "react";
 
 type Props = {
-  shippingAddress?: Awaited<ReturnType<typeof getShippingAddresses>>[number];
+  shippingAddress?: ShippingAddress;
   trigger: React.ReactNode;
   type: "add" | "edit";
 };
 
 type ShippingAddressFormProps = ComponentProps<"form"> & {
-  shippingAddress?: Awaited<ReturnType<typeof getShippingAddresses>>[number];
+  shippingAddress?: ShippingAddress;
   type: "add" | "edit";
   setOpen: Dispatch<SetStateAction<boolean>>;
 };

@@ -14,6 +14,7 @@ import {
   usersSchema,
   wishlistsSchema,
 } from "@/lib/db/schema";
+import type { ProductDetail } from "@/lib/types";
 import {
   type SQL,
   and,

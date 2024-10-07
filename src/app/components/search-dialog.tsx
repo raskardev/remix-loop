@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import type { ProductByName } from "@/lib/types";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { usePathname } from "next/navigation";
@@ -18,17 +19,13 @@ import { useEffect, useState } from "react";
 
 const EXCLUDED_PATHS = ["/sign-in", "/sign-up"];
 
-type Product = Awaited<
-  ReturnType<typeof getProductsByName>
->["products"][number];
-
 export function SearchDialog() {
   const pathname = usePathname();
 
   const show = EXCLUDED_PATHS.includes(pathname);
   if (show) return null;
 
-  const [products, setProducts] = useState<Product[] | undefined>();
+  const [products, setProducts] = useState<ProductByName[] | undefined>();
   const [searchInput, setSearchInput] = useState("");
   const [open, setOpen] = useState(false);
 

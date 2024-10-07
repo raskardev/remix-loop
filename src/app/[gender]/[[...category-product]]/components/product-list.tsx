@@ -1,8 +1,8 @@
 import { ProductCard } from "@/app/[gender]/[[...category-product]]/components/product-card";
-import type { getProducts } from "@/lib/db/queries";
+import type { Product } from "@/lib/types";
 
 type Props = {
-  products: Awaited<ReturnType<typeof getProducts>>;
+  products: Product[];
 };
 
 export function ProductList({ products }: Props) {

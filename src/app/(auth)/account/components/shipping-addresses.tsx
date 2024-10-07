@@ -21,10 +21,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { getShippingAddresses } from "@/lib/db/queries";
+import type { ShippingAddress } from "@/lib/types";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-
-type ShippingAddress = Awaited<ReturnType<typeof getShippingAddresses>>[number];
 
 type Props = {
   shippingAddresses: ShippingAddress[];
