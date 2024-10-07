@@ -12,11 +12,14 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 
 export async function Header() {
-  const categories = await getMainCategories();
-  const shoppingBagItems = await getShoppingBagItems();
-  const wishlistItems = await getWishlistItems();
-  const colors = await getColors();
-  const minMaxPrices = await getLowerAndUpperPrices();
+  const [categories, shoppingBagItems, wishlistItems, colors, minMaxPrices] =
+    await Promise.all([
+      getMainCategories(),
+      getShoppingBagItems(),
+      getWishlistItems(),
+      getColors(),
+      getLowerAndUpperPrices(),
+    ]);
 
   return (
     <header className="sticky top-0 z-50 bg-transparent w-full px-12">

@@ -85,8 +85,16 @@ export async function getUser() {
 
 export async function getMainCategories() {
   const categories = await db
-    .select()
+    .select({
+      id: categoriesSchema.id,
+      name: categoriesSchema.name,
+      slug: categoriesSchema.slug,
+    })
     .from(categoriesSchema)
+    .innerJoin(
+      productsSchema,
+      eq(categoriesSchema.id, productsSchema.categoryId),
+    )
     .where(
       and(isNull(categoriesSchema.parentId), eq(categoriesSchema.active, true)),
     );

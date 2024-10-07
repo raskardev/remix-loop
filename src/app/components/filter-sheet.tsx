@@ -156,7 +156,7 @@ export function FilterSheet({ triggerClassName, colors, minMaxPrices }: Props) {
         <div>
           <Separator />
           <Button className="w-full mt-6" onClick={resetFilters}>
-            Delete filters
+            Reset filters
           </Button>
         </div>
       </SheetContent>

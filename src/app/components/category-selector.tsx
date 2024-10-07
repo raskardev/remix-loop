@@ -1,11 +1,15 @@
 "use client";
 
 import { FilterSheet } from "@/app/components/filter-sheet";
-import type { getLowerAndUpperPrices } from "@/lib/db/queries";
-import type { Category } from "@/lib/db/schema";
+import type {
+  getLowerAndUpperPrices,
+  getMainCategories,
+} from "@/lib/db/queries";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+type Category = Awaited<ReturnType<typeof getMainCategories>>[number];
 
 type Props = {
   categories: Category[];
@@ -51,8 +55,6 @@ export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
     id: "0",
     name: "All",
     slug: "_",
-    parentId: null,
-    active: true,
   };
 
   return (

@@ -63,8 +63,6 @@ export default function RootLayout({
 }>) {
   const userPromise = getUser();
 
-  console.log(process.env.NEXT_PUBLIC_URL);
-
   return (
     <html lang="en">
       <body
