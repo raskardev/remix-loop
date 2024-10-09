@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import type { ActionState } from "@/lib/auth/middleware";
 import type { ProductDetail as ProductDetailType } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, priceToEuro } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -87,7 +87,9 @@ export function ProductDetail({ product }: Props) {
     (size) => size.sizeId === selectedSize,
   )?.productVariantSizeId;
 
-  const formattedPrice = priceFormatter.format(selectedVariant.sizes[0].price);
+  const formattedPrice = priceFormatter.format(
+    priceToEuro(selectedVariant.sizes[0].price),
+  );
 
   return (
     <div className="grid grid-cols-2 max-w-5xl mx-auto gap-10">

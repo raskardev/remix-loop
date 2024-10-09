@@ -1,7 +1,7 @@
 import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
 import { Badge } from "@/components/ui/badge";
 import type { Product } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, priceToEuro } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ const priceFormatter = new Intl.NumberFormat("es-ES", {
 });
 
 export function ProductCard({ product }: Props) {
-  const formattedPrice = priceFormatter.format(product.price ?? 0);
+  const formattedPrice = priceFormatter.format(priceToEuro(product.price));
 
   const genderPath = product.gender === "M" ? "man" : "woman";
 

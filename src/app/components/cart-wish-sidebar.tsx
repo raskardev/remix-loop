@@ -11,6 +11,7 @@ import type {
   ShoppingBagItem as ShoppingBagItemType,
   WishlistItem as WishlistItemType,
 } from "@/lib/types";
+import { priceToEuro } from "@/lib/utils";
 
 import { Heart, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
@@ -37,6 +38,8 @@ function ShoppingBagItem({ product }: ShoppingBagItemProps) {
   const genderSlug = product.gender === "M" ? "man" : "woman";
   const href = `/${genderSlug}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
 
+  const formattedPrice = priceFormatter.format(priceToEuro(product.price));
+
   return (
     <div className="flex space-x-5">
       <Link href={href} key={product.cartProductId}>
@@ -49,9 +52,7 @@ function ShoppingBagItem({ product }: ShoppingBagItemProps) {
       <div className="flex flex-col">
         <Link href={href}>
           <p>{product.productName}</p>
-          <span className="font-bold">
-            {priceFormatter.format(product.price ?? 0)}
-          </span>
+          <span className="font-bold">{formattedPrice}</span>
           <div className="flex space-x-3 text-muted-foreground">
             <span>{product.quantity} item</span> <span>|</span>
             <span>{product.sizeName}</span> <span>|</span>{" "}
@@ -74,6 +75,8 @@ function WishlistItem({ product }: WishlistItemProps) {
   const genderSlug = product.gender === "M" ? "man" : "woman";
   const href = `/${genderSlug}/${product.categorySlug}/${product.productSlug}?color=${product.colorName?.toLowerCase()}`;
 
+  const formattedPrice = priceFormatter.format(priceToEuro(product.price));
+
   async function deleteItemFromWishlist(productVariantId: string | null) {
     if (!productVariantId) return;
 
@@ -95,9 +98,7 @@ function WishlistItem({ product }: WishlistItemProps) {
       <Link href={href}>
         <img src={product.imageUrl ?? ""} alt={product.name ?? ""} />
         <p className="mt-2">{product.name}</p>
-        <span className="font-bold text-sm">
-          {priceFormatter.format(product.price ?? 0)}
-        </span>
+        <span className="font-bold text-sm">{formattedPrice}</span>
       </Link>
       <Button
         onClick={() => deleteItemFromWishlist(product.productVariantId)}
@@ -117,6 +118,15 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
     0,
   );
 
+  const formattedPrice = priceFormatter.format(
+    priceToEuro(
+      shoppingBagItems.reduce(
+        (acc, item) => acc + (item.price ?? 0) * item.quantity,
+        0,
+      ),
+    ),
+  );
+
   return (
     <Sheet>
       <SheetTrigger className="relative">
@@ -128,7 +138,7 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
         ) : null}
       </SheetTrigger>
       <SheetContent>
-        <Tabs defaultValue="shopping-bag" className="mt-4">
+        <Tabs defaultValue="shopping-bag" className="h-full flex flex-col pt-4">
           <TabsList className="w-full mb-3">
             <TabsTrigger className="w-full" value="shopping-bag">
               Shopping bag
@@ -137,14 +147,27 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
               Wishlist
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="shopping-bag">
+          <TabsContent value="shopping-bag" className="flex-1">
             {shoppingBagItems.length > 0 ? (
-              shoppingBagItems.map((item) => (
-                <div key={item.cartProductId}>
-                  <ShoppingBagItem product={item} />
-                  <Separator className="my-2" />
+              <div className="h-full flex flex-col">
+                <div className="flex-1">
+                  {shoppingBagItems.map((item) => (
+                    <div key={item.cartProductId}>
+                      <ShoppingBagItem product={item} />
+                      <Separator className="my-2" />
+                    </div>
+                  ))}
                 </div>
-              ))
+                <div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl font-bold">Total</span>
+                    <span className="text-xl font-bold">{formattedPrice}</span>
+                  </div>
+                  <Button className="w-full mt-4 h-12 rounded-full font-bold">
+                    Process order
+                  </Button>
+                </div>
+              </div>
             ) : (
               <div className="text-center">
                 <h3 className="text-2xl font-bold">
