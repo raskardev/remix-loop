@@ -4,7 +4,14 @@ import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/li
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type {} from "@/lib/db/queries";
 import type {
@@ -12,6 +19,7 @@ import type {
   WishlistItem as WishlistItemType,
 } from "@/lib/types";
 import { priceToEuro } from "@/lib/utils";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { Heart, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
@@ -138,6 +146,14 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
         ) : null}
       </SheetTrigger>
       <SheetContent>
+        <VisuallyHidden>
+          <SheetHeader>
+            <SheetTitle>Shopping bag and wishlist sidebar</SheetTitle>
+            <SheetDescription>
+              Here you can see your shopping bag and wishlist items.
+            </SheetDescription>
+          </SheetHeader>
+        </VisuallyHidden>
         <Tabs defaultValue="shopping-bag" className="h-full flex flex-col pt-4">
           <TabsList className="w-full mb-3">
             <TabsTrigger className="w-full" value="shopping-bag">

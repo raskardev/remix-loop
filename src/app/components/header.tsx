@@ -27,11 +27,11 @@ export async function Header() {
         <Menu color="white" />
         <Link
           href="/"
-          className="text-4xl text-white uppercase font-bold justify-self-center"
+          className="text-xl md:text-4xl text-white uppercase font-bold justify-self-center invisible md:visible"
         >
           LOOP
         </Link>
-        <div className="flex items-center gap-x-6 justify-self-end">
+        <div className="flex items-center justify-self-end gap-x-4">
           <SearchDialog />
           <UserButton
             shoppingBagItems={shoppingBagItems}

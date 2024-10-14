@@ -2,6 +2,7 @@
 
 import { getProductsByName } from "@/app/[gender]/[[...category-product]]/_actions";
 import { ProductList } from "@/app/[gender]/[[...category-product]]/components/product-list";
+import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import type { ProductByName } from "@/lib/types";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -28,6 +30,8 @@ export function SearchDialog() {
   const [products, setProducts] = useState<ProductByName[] | undefined>();
   const [searchInput, setSearchInput] = useState("");
   const [open, setOpen] = useState(false);
+
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -60,13 +64,19 @@ export function SearchDialog() {
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogTrigger asChild>
-        <Button
-          className="w-52 justify-start space-x-4 rounded-2xl border-foreground"
-          variant="outline"
-        >
-          <MagnifyingGlassIcon />
-          <span>Search</span>
-        </Button>
+        {isDesktop ? (
+          <Button
+            className="w-52 justify-start space-x-4 rounded-2xl border-foreground"
+            variant="outline"
+          >
+            <Search className="size-5" />
+            <span>Search</span>
+          </Button>
+        ) : (
+          <Button size="icon" variant="ghost">
+            <Search />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-full h-dvh !rounded-none border-none flex flex-col">
         <VisuallyHidden>
