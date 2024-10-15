@@ -1,9 +1,9 @@
 "use server";
 
-import { validatedActionWithUser } from "@/lib/auth/middleware";
-import { createOrderWithItems } from "@/lib/db/queries";
-import { createCheckoutSession } from "@/lib/stripe";
 import { z } from "zod";
+import { validatedActionWithUser } from "../../../app/lib/auth/middleware";
+import { createOrderWithItems } from "../../../app/lib/db/queries";
+import { createCheckoutSession } from "../../../app/lib/stripe";
 
 const checkoutActionSchema = z.object({
   shippingAddressId: z.string({

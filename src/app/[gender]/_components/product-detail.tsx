@@ -2,10 +2,11 @@
 
 import { addToCart } from "@/app/[gender]/_actions";
 import { LikeButton } from "@/app/[gender]/_components/like-button";
-import type { ActionState } from "@/lib/auth/middleware";
-import type { ProductDetail as ProductDetailType } from "@/lib/types";
-import { cn, priceToEuro } from "@/lib/utils";
-import { Button } from "@/ui/button";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useActionState, useState } from "react";
+import { Button } from "../../../../app/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -13,11 +14,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/ui/select";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useActionState, useState } from "react";
+} from "../../../../app/components/ui/select";
+import type { ActionState } from "../../../../app/lib/auth/middleware";
+import type { ProductDetail as ProductDetailType } from "../../../../app/lib/types";
+import { cn, priceToEuro } from "../../../../app/lib/utils";
 
 type Props = {
   product: ProductDetailType;

@@ -1,4 +1,57 @@
-import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react";
+
+import styles from "./styles.css?url";
+import geistMono from "./fonts/GeistMonoVF.woff?url";
+import geistSans from "./fonts/GeistVF.woff?url";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Loop" },
+    { description: "Loop the store for modern people" },
+    {
+      keywords: [
+        "clothes",
+        "clothing",
+        "modern",
+        "women",
+        "men",
+        "shopping",
+        "online",
+        "store",
+        "shop",
+        "fashion",
+        "style",
+        "trends",
+      ],
+    },
+    {
+      authors: [
+        {
+          name: "Alejandro Vidal",
+          url: "https://github.com/alevidals",
+        },
+      ],
+    },
+    { creator: "Alejandro Vidal" },
+    {
+      property: "og:image",
+      content: "/og.png",
+    },
+  ];
+};
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+  { rel: "stylesheet", href: geistSans },
+  { rel: "stylesheet", href: geistMono },
+];
 
 export default function App() {
   return (
@@ -8,10 +61,9 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <h1>Hello world!</h1>
+      <body className="antialiased text-white dark mx-12">
         <Outlet />
-
+        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

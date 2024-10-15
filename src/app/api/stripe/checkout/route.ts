@@ -1,6 +1,6 @@
-import { updateOrderByIdAndUserId } from "@/lib/db/queries";
-import { stripe } from "@/lib/stripe";
 import { type NextRequest, NextResponse } from "next/server";
+import { updateOrderByIdAndUserId } from "../../../../../app/lib/db/queries";
+import { stripe } from "../../../../../app/lib/stripe";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

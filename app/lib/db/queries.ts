@@ -1,5 +1,5 @@
-import { verifyToken } from "@/lib/auth/session";
-import { db } from "@/lib/db/drizzle";
+import { verifyToken } from "../auth/session";
+import { db } from "./drizzle";
 import {
   type NewShippingAddress,
   cartProductsSchema,
@@ -15,8 +15,8 @@ import {
   sizesSchema,
   usersSchema,
   wishlistsSchema,
-} from "@/lib/db/schema";
-import type { ProductDetail } from "@/lib/types";
+} from "./schema";
+import type { ProductDetail } from "../types";
 import {
   type SQL,
   and,

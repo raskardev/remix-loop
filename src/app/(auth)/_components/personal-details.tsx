@@ -1,13 +1,13 @@
 "use client";
 
 import { updateAccount } from "@/app/(auth)/_actions";
-import type { ActionState } from "@/lib/auth/middleware";
-import { useUser } from "@/lib/auth/provider";
-import { Button } from "@/ui/button";
-import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
 import { Loader2 } from "lucide-react";
 import { useActionState } from "react";
+import { Button } from "../../../../app/components/ui/button";
+import { Input } from "../../../../app/components/ui/input";
+import { Label } from "../../../../app/components/ui/label";
+import type { ActionState } from "../../../../app/lib/auth/middleware";
+import { useUser } from "../../../../app/lib/auth/provider";
 
 export function PersonalDetails() {
   const { user } = useUser();

@@ -2,7 +2,7 @@
 
 import { deleteShippingAddressAction } from "@/app/(auth)/_actions";
 import { AddShippingAddressModal } from "@/app/(auth)/_components/add-shipping-address-modal";
-import type { ShippingAddress } from "@/lib/types";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,16 +13,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/ui/alert-dialog";
-import { Button } from "@/ui/button";
+} from "../../../../app/components/ui/alert-dialog";
+import { Button } from "../../../../app/components/ui/button";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/ui/card";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+} from "../../../../app/components/ui/card";
+import type { ShippingAddress } from "../../../../app/lib/types";
 
 type Props = {
   shippingAddresses: ShippingAddress[];

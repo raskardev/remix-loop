@@ -1,7 +1,10 @@
 import { SearchDialog } from "@/app/[gender]/_components/search-dialog";
 import { UserButton } from "@/app/[gender]/_components/user-button";
-import { getShoppingBagItems, getWishlistItems } from "@/lib/db/queries";
 import Link from "next/link";
+import {
+  getShoppingBagItems,
+  getWishlistItems,
+} from "../../../../app/lib/db/queries";
 
 export async function Header() {
   const [shoppingBagItems, wishlistItems] = await Promise.all([

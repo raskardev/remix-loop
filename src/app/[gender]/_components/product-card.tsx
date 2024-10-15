@@ -1,9 +1,9 @@
 import { LikeButton } from "@/app/[gender]/_components/like-button";
-import type { Product } from "@/lib/types";
-import { cn, priceToEuro } from "@/lib/utils";
-import { Badge } from "@/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "../../../../app/components/ui/badge";
+import type { Product } from "../../../../app/lib/types";
+import { cn, priceToEuro } from "../../../../app/lib/utils";
 
 type Props = {
   product: Product;

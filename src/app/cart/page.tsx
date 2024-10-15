@@ -1,5 +1,8 @@
 import { Cart } from "@/app/cart/components/cart";
-import { getShippingAddresses, getShoppingBagItems } from "@/lib/db/queries";
+import {
+  getShippingAddresses,
+  getShoppingBagItems,
+} from "../../../app/lib/db/queries";
 
 export default async function CartPage() {
   const [shoppingBagItems, shippingAddresses] = await Promise.all([

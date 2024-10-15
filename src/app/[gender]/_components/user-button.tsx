@@ -2,12 +2,12 @@
 
 import { CartWishSidebar } from "@/app/[gender]/_components/cart-wish-sidebar";
 import { UserDropdown } from "@/app/[gender]/_components/user-dropdown";
-import { useUser } from "@/lib/auth/provider";
-import type {} from "@/lib/db/queries";
-import type { ShoppingBagItem, WishlistItem } from "@/lib/types";
 import { User } from "lucide-react";
 import Link from "next/link";
 import colors from "tailwindcss/colors";
+import { useUser } from "../../../../app/lib/auth/provider";
+import type {} from "../../../../app/lib/db/queries";
+import type { ShoppingBagItem, WishlistItem } from "../../../../app/lib/types";
 
 type Props = {
   shoppingBagItems: ShoppingBagItem[];

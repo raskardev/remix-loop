@@ -1,9 +1,12 @@
 "use server";
 
+import {} from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import {
   validatedAction,
   validatedActionWithUser,
-} from "@/lib/auth/middleware";
+} from "../../../app/lib/auth/middleware";
 import {
   addOrUpdateProductToCart,
   createWishlist,
@@ -12,10 +15,7 @@ import {
   getOrCreateCart,
   getProducts,
   removeProductFromCart,
-} from "@/lib/db/queries";
-import {} from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+} from "../../../app/lib/db/queries";
 
 const addRemoveProductToWishlistSchema = z.object({
   productVariantId: z.string(),

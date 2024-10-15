@@ -1,7 +1,11 @@
 import { ProductDetail } from "@/app/[gender]/_components/product-detail";
 import { ProductList } from "@/app/[gender]/_components/product-list";
-import { getMainCategories, getProduct, getProducts } from "@/lib/db/queries";
 import { redirect } from "next/navigation";
+import {
+  getMainCategories,
+  getProduct,
+  getProducts,
+} from "../../../../app/lib/db/queries";
 
 type Props = {
   params: {

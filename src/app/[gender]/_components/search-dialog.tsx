@@ -3,21 +3,21 @@
 import { getProductsByName } from "@/app/[gender]/_actions";
 import { ProductList } from "@/app/[gender]/_components/product-list";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import type { ProductByName } from "@/lib/types";
-import { Button } from "@/ui/button";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Search } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "../../../../app/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/ui/dialog";
-import { Input } from "@/ui/input";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Search } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+} from "../../../../app/components/ui/dialog";
+import { Input } from "../../../../app/components/ui/input";
+import type { ProductByName } from "../../../../app/lib/types";
 
 const EXCLUDED_PATHS = ["/sign-in", "/sign-up"];
 

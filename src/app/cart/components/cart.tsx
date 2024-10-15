@@ -3,22 +3,25 @@
 import { addToCart } from "@/app/[gender]/_actions";
 import { DeleteProductButton } from "@/app/[gender]/_components/delete-product-button";
 import { checkoutAction } from "@/app/cart/_actions";
-import type { ActionState } from "@/lib/auth/middleware";
-import type { ShippingAddress, ShoppingBagItem } from "@/lib/types";
-import { priceToEuro } from "@/lib/utils";
-import { Button } from "@/ui/button";
-import {} from "@/ui/radio-group";
+import { Minus, Plus } from "lucide-react";
+import Image from "next/image";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "../../../../app/components/ui/button";
+import {} from "../../../../app/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/ui/select";
-import { Minus, Plus } from "lucide-react";
-import Image from "next/image";
-import { useActionState, useEffect } from "react";
-import { toast } from "sonner";
+} from "../../../../app/components/ui/select";
+import type { ActionState } from "../../../../app/lib/auth/middleware";
+import type {
+  ShippingAddress,
+  ShoppingBagItem,
+} from "../../../../app/lib/types";
+import { priceToEuro } from "../../../../app/lib/utils";
 
 type Props = {
   shoppingBagItems: ShoppingBagItem[];

@@ -1,8 +1,11 @@
 "use client";
 
 import { signOut } from "@/app/(auth)/_actions";
-import { useUser } from "@/lib/auth/provider";
-import { Button } from "@/ui/button";
+import { CircleAlert, CircleUser, ShoppingBag, User, X } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "../../../../app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +13,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/ui/dropdown-menu";
-import { CircleAlert, CircleUser, ShoppingBag, User, X } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from "../../../../app/components/ui/dropdown-menu";
+import { useUser } from "../../../../app/lib/auth/provider";
 
 export function UserDropdown() {
   const [open, setOpen] = useState(false);

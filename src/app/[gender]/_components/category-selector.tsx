@@ -2,18 +2,18 @@
 
 import { FilterSheet } from "@/app/[gender]/_components/filter-sheet";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import type { Category, MinMaxPrices } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { NavigationMenuLink } from "@/ui/navigation-menu";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { NavigationMenuLink } from "../../../../app/components/ui/navigation-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/ui/navigation-menu";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+} from "../../../../app/components/ui/navigation-menu";
+import type { Category, MinMaxPrices } from "../../../../app/lib/types";
+import { cn } from "../../../../app/lib/utils";
 
 type Props = {
   categories: Category[];

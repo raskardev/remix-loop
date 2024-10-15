@@ -1,6 +1,6 @@
 import { removeFromCart } from "@/app/[gender]/_actions";
-import { Button } from "@/ui/button";
 import { Trash2 } from "lucide-react";
+import { Button } from "../../../../app/components/ui/button";
 
 type Props = {
   cartProductId: string;

@@ -1,4 +1,4 @@
-import { db } from "@/lib/db/drizzle";
+import { db } from "./drizzle";
 import {
   type NewCategory,
   categoriesSchema,
@@ -7,7 +7,7 @@ import {
   productVariantsSchema,
   productsSchema,
   sizesSchema,
-} from "@/lib/db/schema";
+} from "./schema";
 
 async function seedCategories() {
   const categoriesToInsert: NewCategory[] = [

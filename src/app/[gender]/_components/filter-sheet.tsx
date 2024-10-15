@@ -1,7 +1,9 @@
-import type { MinMaxPrices } from "@/lib/types";
-import { cn, priceToEuro } from "@/lib/utils";
-import { Button } from "@/ui/button";
-import { Separator } from "@/ui/separator";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Filter } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { Button } from "../../../../app/components/ui/button";
+import { Separator } from "../../../../app/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -9,12 +11,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/ui/sheet";
-import { Slider } from "@/ui/slider";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Filter } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+} from "../../../../app/components/ui/sheet";
+import { Slider } from "../../../../app/components/ui/slider";
+import type { MinMaxPrices } from "../../../../app/lib/types";
+import { cn, priceToEuro } from "../../../../app/lib/utils";
 
 type Props = {
   triggerClassName?: string;

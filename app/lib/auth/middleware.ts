@@ -1,5 +1,5 @@
-import { getUser } from "@/lib/db/queries";
-import type { User } from "@/lib/db/schema";
+import { getUser } from "../db/queries";
+import type { User } from "../db/schema";
 import type { z } from "zod";
 
 export type ActionState = {

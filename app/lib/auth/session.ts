@@ -1,4 +1,4 @@
-import type { User } from "@/lib/db/schema";
+import type { User } from "../db/schema";
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";

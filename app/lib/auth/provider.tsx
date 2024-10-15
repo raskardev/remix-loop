@@ -1,6 +1,6 @@
 "use client";
 
-import type { User } from "@/lib/db/schema";
+import type { User } from "../db/schema";
 import {
   type ReactNode,
   createContext,

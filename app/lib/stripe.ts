@@ -1,4 +1,4 @@
-import { getShoppingBagItems, getUser } from "@/lib/db/queries";
+import { getShoppingBagItems, getUser } from "./db/queries";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 

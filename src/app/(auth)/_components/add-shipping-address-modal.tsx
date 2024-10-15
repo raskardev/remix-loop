@@ -1,31 +1,6 @@
 // import { useMediaQuery } from "@/hooks/use-media-query";
 import { addOrUpdateShippingAddressAction } from "@/app/(auth)/_actions";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import type { ActionState } from "@/lib/auth/middleware";
-import type { ShippingAddress } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { Button } from "@/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/ui/drawer";
-import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
-import { Textarea } from "@/ui/textarea";
 import { Loader2 } from "lucide-react";
 import {
   type ComponentProps,
@@ -35,6 +10,31 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Button } from "../../../../app/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../../app/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../../../../app/components/ui/drawer";
+import { Input } from "../../../../app/components/ui/input";
+import { Label } from "../../../../app/components/ui/label";
+import { Textarea } from "../../../../app/components/ui/textarea";
+import type { ActionState } from "../../../../app/lib/auth/middleware";
+import type { ShippingAddress } from "../../../../app/lib/types";
+import { cn } from "../../../../app/lib/utils";
 
 type Props = {
   shippingAddress?: ShippingAddress;

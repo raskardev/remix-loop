@@ -1,21 +1,25 @@
 "use server";
 
-import {
-  validatedAction,
-  validatedActionWithUser,
-} from "@/lib/auth/middleware";
-import { comparePasswords, hashPassword, setSession } from "@/lib/auth/session";
-import { db } from "@/lib/db/drizzle";
-import {
-  addOrUpdateShippingAddress,
-  deleteShippingAddress,
-} from "@/lib/db/queries";
-import { type NewUser, usersSchema } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import {
+  validatedAction,
+  validatedActionWithUser,
+} from "../../../app/lib/auth/middleware";
+import {
+  comparePasswords,
+  hashPassword,
+  setSession,
+} from "../../../app/lib/auth/session";
+import { db } from "../../../app/lib/db/drizzle";
+import {
+  addOrUpdateShippingAddress,
+  deleteShippingAddress,
+} from "../../../app/lib/db/queries";
+import { type NewUser, usersSchema } from "../../../app/lib/db/schema";
 
 const signInSchema = z.object({
   email: z.string().email().min(3).max(255),

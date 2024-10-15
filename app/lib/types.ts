@@ -6,7 +6,7 @@ import type {
   getShippingAddresses,
   getShoppingBagItems,
   getWishlistItems,
-} from "@/lib/db/queries";
+} from "./db/queries";
 
 export type ProductDetail = {
   name: string;
