@@ -56,7 +56,6 @@ export const addRemoveProductToWishlist = validatedActionWithUser(
       userId,
     });
 
-    // TODO: change to more specific path
     revalidatePath("/:gender");
     return { success: "Product removed from wishlist successfully." };
   },
@@ -64,7 +63,7 @@ export const addRemoveProductToWishlist = validatedActionWithUser(
 
 const addProductToCartSchema = z.object({
   productVariantSizeId: z.string(),
-  quantity: z.coerce.number().min(1).max(10),
+  quantity: z.coerce.number().min(-1).max(10),
 });
 
 export const addToCart = validatedActionWithUser(
@@ -85,7 +84,6 @@ export const addToCart = validatedActionWithUser(
       cartId,
     });
 
-    // TODO: change to more specific path
     revalidatePath("/:gender");
 
     return { success: "Product added to cart successfully." };

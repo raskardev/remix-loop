@@ -168,8 +168,16 @@ export const cartProductsSchema = sqliteTable("cart_products", {
 
 export const ordersSchema = sqliteTable("orders", {
   id: text("id").default(sql`(uuid())`).primaryKey(),
-  status: text("status").notNull(),
+  amount: real("amount").notNull(),
+  status: text("status", {
+    enum: ["pending", "processing", "completed", "cancelled"],
+  })
+    .notNull()
+    .default("pending"),
   userId: text("user_id").references(() => usersSchema.id),
+  shippingAddressId: text("shipping_address_id")
+    .references(() => shippingAddressesSchema.id)
+    .notNull(),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
@@ -180,13 +188,6 @@ export const orderItemsSchema = sqliteTable("order_items", {
   productVariantId: text("product_variant_id").references(
     () => productVariantsSchema.id,
   ),
-  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-export const paymentDetailsSchema = sqliteTable("payment_details", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
-  amount: real("amount").notNull(),
-  orderId: text("order_id").references(() => ordersSchema.id),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
@@ -253,16 +254,6 @@ export const shippingAddressesRelations = relations(
     user: one(usersSchema, {
       fields: [shippingAddressesSchema.userId],
       references: [usersSchema.id],
-    }),
-  }),
-);
-
-export const paymentDetailsRelations = relations(
-  paymentDetailsSchema,
-  ({ one }) => ({
-    order: one(ordersSchema, {
-      fields: [paymentDetailsSchema.orderId],
-      references: [ordersSchema.id],
     }),
   }),
 );

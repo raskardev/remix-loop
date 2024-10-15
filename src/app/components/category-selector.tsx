@@ -21,7 +21,7 @@ type Props = {
   minMaxPrices: MinMaxPrices;
 };
 
-const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account"];
+const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account", "/cart"];
 
 function DesktopCategoryLink({ category }: { category: Category }) {
   const pathname = usePathname();

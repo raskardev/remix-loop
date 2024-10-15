@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/lib/auth/provider";
 import { getUser } from "@/lib/db/queries";
 import { Header } from "./components/header";
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
   creator: "Alejandro Vidal",
   openGraph: {
     type: "website",
-    url: process.env.URL,
+    url: process.env.BASE_URL,
     title: "Loop",
     description: "Loop the store for modern people",
     images: [
@@ -71,6 +72,7 @@ export default function RootLayout({
         <UserProvider userPromise={userPromise}>
           <Header />
           <main className="flex-1 px-12 flex flex-col">{children}</main>
+          <Toaster />
         </UserProvider>
       </body>
     </html>

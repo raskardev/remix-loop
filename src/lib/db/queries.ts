@@ -6,6 +6,8 @@ import {
   cartsSchema,
   categoriesSchema,
   colorsSchema,
+  orderItemsSchema,
+  ordersSchema,
   productVariantSizes,
   productVariantsSchema,
   productsSchema,
@@ -39,8 +41,8 @@ type GetProductsArgs = {
   searchTerm?: string;
   orderBy?: string;
   color?: string;
-  priceMin?: string;
-  priceMax?: string;
+  priceMin?: number;
+  priceMax?: number;
 };
 
 type CreateDeleteWishlistArgs = {
@@ -67,6 +69,16 @@ type ExistsInCartArgs = {
 type AddOrUpdateShippingAddress = {
   shippingAddress: NewShippingAddress;
   type: "add" | "edit";
+};
+
+type CreateOrderWithItemsArgs = {
+  shippingAddressId: string;
+  userId: string;
+};
+
+type UpdateOrderByIdAndUserIdArgs = {
+  orderId: string;
+  userId: string;
 };
 
 export async function getUser() {
@@ -159,11 +171,11 @@ export async function getProducts({
   }
 
   if (priceMin) {
-    whereFilters.push(gte(productsSchema.price, Number(priceMin)));
+    whereFilters.push(gte(productsSchema.price, priceMin));
   }
 
   if (priceMax) {
-    whereFilters.push(lte(productsSchema.price, Number(priceMax)));
+    whereFilters.push(lte(productsSchema.price, priceMax));
   }
 
   const products = await db
@@ -504,6 +516,7 @@ export async function getShoppingBagItems() {
       imageUrl: productVariantsSchema.imageUrl,
       isWishlisted: isNotNull(wishlistsSchema.userId),
       productVariantId: productVariantsSchema.id,
+      productVariantSizeId: productVariantSizes.id,
       gender: productsSchema.targetGender,
       productSlug: productsSchema.slug,
       categorySlug: categoriesSchema.slug,
@@ -658,4 +671,73 @@ export async function deleteShippingAddress(
         eq(shippingAddressesSchema.userId, userId),
       ),
     );
+}
+
+export async function createOrderWithItems({
+  shippingAddressId,
+  userId,
+}: CreateOrderWithItemsArgs) {
+  const shoppingBagItems = await getShoppingBagItems();
+
+  const totalPrice = shoppingBagItems.reduce(
+    (acc, item) => acc + (item.price ?? 0) * item.quantity,
+    0,
+  );
+
+  const [order] = await db
+    .insert(ordersSchema)
+    .values({
+      userId,
+      amount: totalPrice,
+      shippingAddressId,
+      status: "pending",
+    })
+    .returning();
+
+  if (!order) return null;
+
+  const { id: orderId } = order;
+
+  const promises = shoppingBagItems.map((item) =>
+    db.insert(orderItemsSchema).values({
+      quantity: item.quantity,
+      orderId,
+      productVariantId: item.productVariantId,
+    }),
+  );
+
+  const promisesResult = await Promise.allSettled(promises);
+
+  if (promisesResult.some((result) => result.status === "rejected")) {
+    // TODO: delete order and the other items
+    return null;
+  }
+
+  return order;
+}
+
+export async function deleteCart(userId: string) {
+  const cart = await getCart();
+
+  if (!cart) return null;
+
+  await db
+    .delete(cartProductsSchema)
+    .where(eq(cartProductsSchema.cartId, cart.id));
+}
+
+export async function updateOrderByIdAndUserId({
+  orderId,
+  userId,
+}: UpdateOrderByIdAndUserIdArgs) {
+  const success = await db
+    .update(ordersSchema)
+    .set({ status: "completed" })
+    .where(and(eq(ordersSchema.id, orderId), eq(ordersSchema.userId, userId)))
+    .then(() => true)
+    .catch(() => false);
+
+  await deleteCart(userId);
+
+  return success;
 }

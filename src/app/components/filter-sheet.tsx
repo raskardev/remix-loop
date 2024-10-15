@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import type { MinMaxPrices } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, priceToEuro } from "@/lib/utils";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -32,10 +32,10 @@ export function FilterSheet({ triggerClassName, colors, minMaxPrices }: Props) {
   const searchParams = useSearchParams();
 
   const minRange =
-    Math.round(minMaxPrices?.min ?? 0) - 10 < 0
+    Math.round(priceToEuro(minMaxPrices?.min ?? 0)) - 10 < 0
       ? 0
-      : Math.round(minMaxPrices?.min ?? 0) - 10;
-  const maxRange = Math.round(minMaxPrices?.max ?? 0) + 10;
+      : Math.round(priceToEuro(minMaxPrices?.min ?? 0)) - 10;
+  const maxRange = Math.round(priceToEuro(minMaxPrices?.max ?? 0)) + 10;
 
   const [min, setMin] = useState(() => minRange);
   const [max, setMax] = useState(() => maxRange);
@@ -80,6 +80,7 @@ export function FilterSheet({ triggerClassName, colors, minMaxPrices }: Props) {
             <h3 className="font-bold text-xl">Order by</h3>
             <div className="flex space-x-3 mt-4">
               <Button
+                variant="outline"
                 className={cn({
                   "font-bold": searchParamsSort === "price_asc",
                 })}
@@ -88,6 +89,7 @@ export function FilterSheet({ triggerClassName, colors, minMaxPrices }: Props) {
                 Price low to high
               </Button>
               <Button
+                variant="outline"
                 className={cn({
                   "font-bold": searchParamsSort === "price_desc",
                 })}
@@ -155,7 +157,11 @@ export function FilterSheet({ triggerClassName, colors, minMaxPrices }: Props) {
         </div>
         <div>
           <Separator />
-          <Button className="w-full mt-6" onClick={resetFilters}>
+          <Button
+            variant="outline"
+            className="w-full mt-6"
+            onClick={resetFilters}
+          >
             Reset filters
           </Button>
         </div>

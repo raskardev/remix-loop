@@ -26,8 +26,12 @@ export default async function CategoryGenderPage(props: Props) {
       category: categorySlug,
       orderBy: props.searchParams.sort,
       color: props.searchParams.color,
-      priceMin: props.searchParams.price_min,
-      priceMax: props.searchParams.price_max,
+      priceMin: props.searchParams.price_min
+        ? +props.searchParams.price_min * 100
+        : undefined,
+      priceMax: props.searchParams.price_max
+        ? +props.searchParams.price_max * 100
+        : undefined,
     });
 
     return <ProductList products={products} />;

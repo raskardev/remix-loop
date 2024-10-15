@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `shipping_address_id` text NOT NULL REFERENCES shipping_addresses(id);

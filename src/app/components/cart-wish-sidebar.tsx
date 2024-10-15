@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -50,23 +51,27 @@ function ShoppingBagItem({ product }: ShoppingBagItemProps) {
 
   return (
     <div className="flex space-x-5">
-      <Link href={href} key={product.cartProductId}>
-        <img
-          src={product.imageUrl ?? ""}
-          alt={product.productName ?? ""}
-          className="w-28 h-full"
-        />
-      </Link>
-      <div className="flex flex-col">
-        <Link href={href}>
-          <p>{product.productName}</p>
-          <span className="font-bold">{formattedPrice}</span>
-          <div className="flex space-x-3 text-muted-foreground">
-            <span>{product.quantity} item</span> <span>|</span>
-            <span>{product.sizeName}</span> <span>|</span>{" "}
-            <span>{product.colorName}</span>
-          </div>
+      <SheetClose asChild>
+        <Link href={href} key={product.cartProductId}>
+          <img
+            src={product.imageUrl ?? ""}
+            alt={product.productName ?? ""}
+            className="w-28 h-full"
+          />
         </Link>
+      </SheetClose>
+      <div className="flex flex-col">
+        <SheetClose asChild>
+          <Link href={href}>
+            <p>{product.productName}</p>
+            <span className="font-bold">{formattedPrice}</span>
+            <div className="flex space-x-3 text-muted-foreground">
+              <span>{product.quantity} item</span> <span>|</span>
+              <span>{product.sizeName}</span> <span>|</span>{" "}
+              <span>{product.colorName}</span>
+            </div>
+          </Link>
+        </SheetClose>
         <div className="mt-4 flex space-x-3">
           <LikeButton
             isLiked={product.isWishlisted}
@@ -103,11 +108,13 @@ function WishlistItem({ product }: WishlistItemProps) {
 
   return (
     <div className="relative">
-      <Link href={href}>
-        <img src={product.imageUrl ?? ""} alt={product.name ?? ""} />
-        <p className="mt-2">{product.name}</p>
-        <span className="font-bold text-sm">{formattedPrice}</span>
-      </Link>
+      <SheetClose asChild>
+        <Link href={href}>
+          <img src={product.imageUrl ?? ""} alt={product.name ?? ""} />
+          <p className="mt-2">{product.name}</p>
+          <span className="font-bold text-sm">{formattedPrice}</span>
+        </Link>
+      </SheetClose>
       <Button
         onClick={() => deleteItemFromWishlist(product.productVariantId)}
         size="icon"
@@ -179,8 +186,13 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
                     <span className="text-xl font-bold">Total</span>
                     <span className="text-xl font-bold">{formattedPrice}</span>
                   </div>
-                  <Button className="w-full mt-4 h-12 rounded-full font-bold">
-                    Process order
+                  <Button
+                    className="w-full mt-4 h-12 rounded-full font-bold"
+                    asChild
+                  >
+                    <SheetClose asChild>
+                      <Link href="/cart">Process order</Link>
+                    </SheetClose>
                   </Button>
                 </div>
               </div>
