@@ -1,8 +1,9 @@
+import { randomUUID } from "node:crypto";
 import { relations, sql } from "drizzle-orm";
 import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const usersSchema = sqliteTable("users", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 100,
   }).notNull(),
@@ -17,7 +18,7 @@ export const usersSchema = sqliteTable("users", {
 });
 
 export const categoriesSchema = sqliteTable("categories", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 100,
   })
@@ -33,7 +34,7 @@ export const categoriesSchema = sqliteTable("categories", {
 });
 
 export const productsSchema = sqliteTable("products", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 50,
   })
@@ -63,7 +64,7 @@ export const productsSchema = sqliteTable("products", {
 });
 
 export const sizesSchema = sqliteTable("sizes", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 100,
   })
@@ -73,7 +74,7 @@ export const sizesSchema = sqliteTable("sizes", {
 });
 
 export const colorsSchema = sqliteTable("colors", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 100,
   })
@@ -83,7 +84,7 @@ export const colorsSchema = sqliteTable("colors", {
 });
 
 export const productVariantsSchema = sqliteTable("product_variants", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   productId: text("product_id").references(() => productsSchema.id),
   colorId: text("color_id").references(() => colorsSchema.id),
   imageUrl: text("image_url").notNull(),
@@ -92,7 +93,7 @@ export const productVariantsSchema = sqliteTable("product_variants", {
 });
 
 export const productVariantSizes = sqliteTable("product_variant_sizes", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   productVariantId: text("product_variant_id")
     .references(() => productVariantsSchema.id)
     .notNull(),
@@ -105,7 +106,7 @@ export const productVariantSizes = sqliteTable("product_variant_sizes", {
 });
 
 export const wishlistsSchema = sqliteTable("wishlists", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   userId: text("user_id").references(() => usersSchema.id),
   productVariantId: text("product_variant_id")
     .references(() => productVariantsSchema.id)
@@ -114,7 +115,7 @@ export const wishlistsSchema = sqliteTable("wishlists", {
 });
 
 export const shippingAddressesSchema = sqliteTable("shipping_addresses", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   name: text("name", {
     length: 100,
   }).notNull(),
@@ -151,12 +152,12 @@ export const shippingAddressesSchema = sqliteTable("shipping_addresses", {
 });
 
 export const cartsSchema = sqliteTable("carts", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   userId: text("user_id").references(() => usersSchema.id),
 });
 
 export const cartProductsSchema = sqliteTable("cart_products", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   cartId: text("cart_id")
     .references(() => cartsSchema.id)
     .notNull(),
@@ -167,7 +168,7 @@ export const cartProductsSchema = sqliteTable("cart_products", {
 });
 
 export const ordersSchema = sqliteTable("orders", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   amount: real("amount").notNull(),
   status: text("status", {
     enum: ["pending", "processing", "completed", "cancelled"],
@@ -182,7 +183,7 @@ export const ordersSchema = sqliteTable("orders", {
 });
 
 export const orderItemsSchema = sqliteTable("order_items", {
-  id: text("id").default(sql`(uuid())`).primaryKey(),
+  id: text("id").default(randomUUID()).primaryKey(),
   quantity: integer("quantity").default(1).notNull(),
   orderId: text("order_id").references(() => ordersSchema.id),
   productVariantId: text("product_variant_id").references(
@@ -294,4 +295,5 @@ export type Product = typeof productsSchema.$inferSelect;
 export type NewProduct = typeof productsSchema.$inferInsert;
 export type ProductVariant = typeof productVariantsSchema.$inferSelect;
 export type NewProductVariant = typeof productVariantsSchema.$inferInsert;
+export type NewProductVariantSize = typeof productVariantSizes.$inferInsert;
 export type NewShippingAddress = typeof shippingAddressesSchema.$inferInsert;

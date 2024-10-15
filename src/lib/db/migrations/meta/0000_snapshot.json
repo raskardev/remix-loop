@@ -1,8 +1,8 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "d80af705-6ea0-4a46-bebd-997bfdbd6287",
-	"prevId": "9467914c-40ff-4db5-99d8-55a9bd30de6d",
+	"id": "453bbc8a-26d9-4ce3-b134-6d59fce5e93f",
+	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"cart_products": {
 			"name": "cart_products",
@@ -263,13 +263,6 @@
 					"autoincrement": false,
 					"default": "(uuid())"
 				},
-				"status": {
-					"name": "status",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
 				"amount": {
 					"name": "amount",
 					"type": "real",
@@ -277,11 +270,26 @@
 					"notNull": true,
 					"autoincrement": false
 				},
+				"status": {
+					"name": "status",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "'pending'"
+				},
 				"user_id": {
 					"name": "user_id",
 					"type": "text",
 					"primaryKey": false,
 					"notNull": false,
+					"autoincrement": false
+				},
+				"shipping_address_id": {
+					"name": "shipping_address_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
 					"autoincrement": false
 				},
 				"created_at": {
@@ -300,6 +308,15 @@
 					"tableFrom": "orders",
 					"tableTo": "users",
 					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"orders_shipping_address_id_shipping_addresses_id_fk": {
+					"name": "orders_shipping_address_id_shipping_addresses_id_fk",
+					"tableFrom": "orders",
+					"tableTo": "shipping_addresses",
+					"columnsFrom": ["shipping_address_id"],
 					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
