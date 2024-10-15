@@ -1,17 +1,17 @@
 "use client";
 
-import { FilterSheet } from "@/app/components/filter-sheet";
+import { FilterSheet } from "@/app/[gender]/_components/filter-sheet";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { NavigationMenuLink } from "@/components/ui/navigation-menu";
+import type { Category, MinMaxPrices } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { NavigationMenuLink } from "@/ui/navigation-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import type { Category, MinMaxPrices } from "@/lib/types";
-import { cn } from "@/lib/utils";
+} from "@/ui/navigation-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,8 +20,6 @@ type Props = {
   colors: string[];
   minMaxPrices: MinMaxPrices;
 };
-
-const EXCLUDED_PATHS = ["/", "/sign-in", "/sign-up", "/account", "/cart"];
 
 function DesktopCategoryLink({ category }: { category: Category }) {
   const pathname = usePathname();
@@ -75,12 +73,7 @@ function MobileCategoryLink({ category }: { category: Category }) {
 }
 
 export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
-  const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  const show =
-    EXCLUDED_PATHS.includes(pathname) || pathname.split("/").length >= 4;
-  if (show) return null;
 
   const allItems: Category = {
     id: "0",
@@ -113,7 +106,7 @@ export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="grid w-[350px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 <MobileCategoryLink category={allItems} />
                 {categories.map((category) => (
                   <MobileCategoryLink key={category.id} category={category} />

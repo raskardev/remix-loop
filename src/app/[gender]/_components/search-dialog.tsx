@@ -1,18 +1,18 @@
 "use client";
 
-import { getProductsByName } from "@/app/[gender]/[[...category-product]]/_actions";
-import { ProductList } from "@/app/[gender]/[[...category-product]]/components/product-list";
+import { getProductsByName } from "@/app/[gender]/_actions";
+import { ProductList } from "@/app/[gender]/_components/product-list";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { Button } from "@/components/ui/button";
+import type { ProductByName } from "@/lib/types";
+import { Button } from "@/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import type { ProductByName } from "@/lib/types";
+} from "@/ui/dialog";
+import { Input } from "@/ui/input";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Search } from "lucide-react";
@@ -87,7 +87,7 @@ export function SearchDialog() {
           <MagnifyingGlassIcon className="h-6 w-6" />
           <form className="w-full" action={searchAction}>
             <Input
-              className="border-none outline-none focus-visible:ring-0 text-2xl font-semibold"
+              className="border-none outline-none focus-visible:ring-0 text-xl md:text-2xl font-semibold"
               placeholder="What are you looking for?"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}

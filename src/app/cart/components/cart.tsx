@@ -1,20 +1,20 @@
 "use client";
 
-import { addToCart } from "@/app/[gender]/[[...category-product]]/_actions";
-import { DeleteProductButton } from "@/app/[gender]/[[...category-product]]/components/delete-product-button";
+import { addToCart } from "@/app/[gender]/_actions";
+import { DeleteProductButton } from "@/app/[gender]/_components/delete-product-button";
 import { checkoutAction } from "@/app/cart/_actions";
-import { Button } from "@/components/ui/button";
-import {} from "@/components/ui/radio-group";
+import type { ActionState } from "@/lib/auth/middleware";
+import type { ShippingAddress, ShoppingBagItem } from "@/lib/types";
+import { priceToEuro } from "@/lib/utils";
+import { Button } from "@/ui/button";
+import {} from "@/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import type { ActionState } from "@/lib/auth/middleware";
-import type { ShippingAddress, ShoppingBagItem } from "@/lib/types";
-import { priceToEuro } from "@/lib/utils";
+} from "@/ui/select";
 import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useActionState, useEffect } from "react";
@@ -48,24 +48,26 @@ function BagListProduct({ product }: BagListProductProps) {
   return (
     <li
       key={product.cartProductId}
-      className="flex gap-4 border p-4 rounded-md"
+      className="flex flex-col md:flex-row gap-4 border p-4 rounded-md"
     >
-      <Image
-        quality={100}
-        src={product.imageUrl ?? ""}
-        alt={product.productName ?? ""}
-        width={100}
-        height={100}
-      />
-      <div className="flex flex-col">
-        <span className="font-bold">{product.productName}</span>
-        <span className="font-bold text-lg">
-          {priceFormatter.format(priceToEuro(product.price))}
-        </span>
-        <span>{product.sizeName}</span>
-        <span>Quantity: {product.quantity}</span>
+      <div className="flex gap-4">
+        <Image
+          quality={100}
+          src={product.imageUrl ?? ""}
+          alt={product.productName ?? ""}
+          width={100}
+          height={100}
+        />
+        <div className="flex flex-col">
+          <span className="font-bold">{product.productName}</span>
+          <span className="font-bold text-lg">
+            {priceFormatter.format(priceToEuro(product.price))}
+          </span>
+          <span>{product.sizeName}</span>
+          <span>Quantity: {product.quantity}</span>
+        </div>
       </div>
-      <div className="ml-auto flex items-start space-x-4">
+      <div className="md:ml-auto flex items-start space-x-4">
         <div className="flex items-center border rounded-full overflow-hidden">
           <Button
             variant="ghost"
@@ -119,14 +121,14 @@ export function Cart({ shippingAddresses, shoppingBagItems }: Props) {
   return (
     <>
       <h3 className="text-xl mb-4 font-bold">Shopping Bag</h3>
-      <ul className="grid grid-cols-4 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {shoppingBagItems.map((item) => (
           <BagListProduct key={item.cartProductId} product={item} />
         ))}
       </ul>
       <h3 className="text-xl my-4 font-bold">Delivery Address</h3>
       <form action={formAction}>
-        <Select name="shippingAddressId">
+        <Select name="shippingAddressId" required>
           <SelectTrigger className="w-64">
             <SelectValue placeholder="Delivery address" />
           </SelectTrigger>

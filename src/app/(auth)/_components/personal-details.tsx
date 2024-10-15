@@ -1,11 +1,11 @@
 "use client";
 
-import { updateAccount } from "@/app/(auth)/actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { updateAccount } from "@/app/(auth)/_actions";
 import type { ActionState } from "@/lib/auth/middleware";
 import { useUser } from "@/lib/auth/provider";
+import { Button } from "@/ui/button";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
 import { Loader2 } from "lucide-react";
 import { useActionState } from "react";
 
@@ -21,7 +21,7 @@ export function PersonalDetails() {
   );
 
   return (
-    <>
+    <div className="max-w-2xl mx-auto">
       <h2 className="text-2xl mb-4">Personal details</h2>
       <form action={formAction} className="grid items-start gap-4">
         <div>
@@ -79,6 +79,6 @@ export function PersonalDetails() {
           )}
         </Button>
       </form>
-    </>
+    </div>
   );
 }

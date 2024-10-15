@@ -1,7 +1,10 @@
 // import { useMediaQuery } from "@/hooks/use-media-query";
-import { addOrUpdateShippingAddressAction } from "@/app/(auth)/actions";
+import { addOrUpdateShippingAddressAction } from "@/app/(auth)/_actions";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { Button } from "@/components/ui/button";
+import type { ActionState } from "@/lib/auth/middleware";
+import type { ShippingAddress } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { Button } from "@/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -19,13 +22,10 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import type { ActionState } from "@/lib/auth/middleware";
-import type { ShippingAddress } from "@/lib/types";
-import { cn } from "@/lib/utils";
+} from "@/ui/drawer";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
+import { Textarea } from "@/ui/textarea";
 import { Loader2 } from "lucide-react";
 import {
   type ComponentProps,

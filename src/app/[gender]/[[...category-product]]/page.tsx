@@ -1,6 +1,6 @@
-import { ProductDetail } from "@/app/[gender]/[[...category-product]]/components/product-detail";
-import { ProductList } from "@/app/[gender]/[[...category-product]]/components/product-list";
-import { getProduct, getProducts } from "@/lib/db/queries";
+import { ProductDetail } from "@/app/[gender]/_components/product-detail";
+import { ProductList } from "@/app/[gender]/_components/product-list";
+import { getMainCategories, getProduct, getProducts } from "@/lib/db/queries";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -17,7 +17,20 @@ type Props = {
 };
 
 export default async function CategoryGenderPage(props: Props) {
+  if (!["woman", "man"].includes(props.params.gender)) {
+    redirect("/");
+  }
+
   const categorySlug = props.params["category-product"]?.[0];
+
+  const categories = (await getMainCategories()).map(
+    (category) => category.slug,
+  );
+
+  if (categorySlug && !categories.includes(categorySlug)) {
+    redirect(`/${props.params.gender}`);
+  }
+
   const productSlug = props.params["category-product"]?.[1];
 
   if (!productSlug) {

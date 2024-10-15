@@ -13,7 +13,6 @@ async function seedCategories() {
   const categoriesToInsert: NewCategory[] = [
     {
       id: "1",
-
       name: "Jeans and trousers",
       slug: "jeans-and-trousers",
       active: true,

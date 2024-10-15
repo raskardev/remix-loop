@@ -1,6 +1,6 @@
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getShippingAddresses } from "@/lib/db/queries";
+import { Label } from "@/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 
 export default async function AddressPage() {
   const shippingAddresses = await getShippingAddresses();

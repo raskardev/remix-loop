@@ -1,6 +1,6 @@
-import { CategorySelector } from "@/app/components/category-selector";
-import { SearchDialog } from "@/app/components/search-dialog";
-import { UserButton } from "@/app/components/user-button";
+import { CategorySelector } from "@/app/[gender]/_components/category-selector";
+import { SearchDialog } from "@/app/[gender]/_components/search-dialog";
+import { UserButton } from "@/app/[gender]/_components/user-button";
 import {
   getColors,
   getLowerAndUpperPrices,
@@ -8,7 +8,6 @@ import {
   getShoppingBagItems,
   getWishlistItems,
 } from "@/lib/db/queries";
-import { Menu } from "lucide-react";
 import Link from "next/link";
 
 export async function Header() {
@@ -22,16 +21,15 @@ export async function Header() {
     ]);
 
   return (
-    <header className="sticky top-0 z-50 bg-transparent w-full px-12">
-      <div className="h-24 grid grid-cols-3 items-center">
-        <Menu color="white" />
+    <header className="sticky top-0 z-50 bg-transparent w-full">
+      <div className="h-24 flex items-center relative">
         <Link
           href="/"
-          className="text-xl md:text-4xl text-white uppercase font-bold justify-self-center invisible md:visible"
+          className="text-xl md:text-4xl text-white uppercase font-bold justify-self-center md:absolute md:top-1/2 md:-translate-y-1/2 md:left-1/2 md:-translate-x-1/2"
         >
           LOOP
         </Link>
-        <div className="flex items-center justify-self-end gap-x-4">
+        <div className="flex items-center justify-self-end gap-x-4 ml-auto">
           <SearchDialog />
           <UserButton
             shoppingBagItems={shoppingBagItems}

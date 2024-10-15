@@ -105,7 +105,7 @@ export async function getUser() {
 
 export async function getMainCategories() {
   const categories = await db
-    .select({
+    .selectDistinct({
       id: categoriesSchema.id,
       name: categoriesSchema.name,
       slug: categoriesSchema.slug,

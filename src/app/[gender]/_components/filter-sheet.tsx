@@ -1,5 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import type { MinMaxPrices } from "@/lib/types";
+import { cn, priceToEuro } from "@/lib/utils";
+import { Button } from "@/ui/button";
+import { Separator } from "@/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -7,10 +9,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Slider } from "@/components/ui/slider";
-import type { MinMaxPrices } from "@/lib/types";
-import { cn, priceToEuro } from "@/lib/utils";
+} from "@/ui/sheet";
+import { Slider } from "@/ui/slider";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";

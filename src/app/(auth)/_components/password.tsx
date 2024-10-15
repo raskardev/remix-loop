@@ -1,10 +1,10 @@
 "use client";
 
-import { updatePassword } from "@/app/(auth)/actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { updatePassword } from "@/app/(auth)/_actions";
 import type { ActionState } from "@/lib/auth/middleware";
+import { Button } from "@/ui/button";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
 import { Loader2 } from "lucide-react";
 import { useActionState } from "react";
 
@@ -18,7 +18,7 @@ export function Password() {
   );
 
   return (
-    <>
+    <div className="max-w-2xl mx-auto">
       <h3 className="text-xl my-4">Password</h3>
       <form action={formAction} className="grid items-start gap-4">
         <div>
@@ -92,6 +92,6 @@ export function Password() {
           )}
         </Button>
       </form>
-    </>
+    </div>
   );
 }

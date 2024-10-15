@@ -1,5 +1,5 @@
-import { removeFromCart } from "@/app/[gender]/[[...category-product]]/_actions";
-import { Button } from "@/components/ui/button";
+import { removeFromCart } from "@/app/[gender]/_actions";
+import { Button } from "@/ui/button";
 import { Trash2 } from "lucide-react";
 
 type Props = {

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/lib/auth/provider";
 import { getUser } from "@/lib/db/queries";
-import { Header } from "./components/header";
+import { Toaster } from "@/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -67,11 +66,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white dark flex flex-col min-h-dvh`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white dark mx-12`}
       >
         <UserProvider userPromise={userPromise}>
-          <Header />
-          <main className="flex-1 px-12 flex flex-col">{children}</main>
+          {children}
           <Toaster />
         </UserProvider>
       </body>

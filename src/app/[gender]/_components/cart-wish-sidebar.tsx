@@ -1,9 +1,14 @@
-import { addRemoveProductToWishlist } from "@/app/[gender]/[[...category-product]]/_actions";
-import { DeleteProductButton } from "@/app/[gender]/[[...category-product]]/components/delete-product-button";
-import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { addRemoveProductToWishlist } from "@/app/[gender]/_actions";
+import { DeleteProductButton } from "@/app/[gender]/_components/delete-product-button";
+import { LikeButton } from "@/app/[gender]/_components/like-button";
+import type {
+  ShoppingBagItem as ShoppingBagItemType,
+  WishlistItem as WishlistItemType,
+} from "@/lib/types";
+import { priceToEuro } from "@/lib/utils";
+import { Badge } from "@/ui/badge";
+import { Button } from "@/ui/button";
+import { Separator } from "@/ui/separator";
 import {
   Sheet,
   SheetClose,
@@ -12,16 +17,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type {} from "@/lib/db/queries";
-import type {
-  ShoppingBagItem as ShoppingBagItemType,
-  WishlistItem as WishlistItemType,
-} from "@/lib/types";
-import { priceToEuro } from "@/lib/utils";
+} from "@/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-
 import { Heart, ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 

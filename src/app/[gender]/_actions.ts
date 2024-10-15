@@ -70,6 +70,7 @@ export const addToCart = validatedActionWithUser(
   addProductToCartSchema,
   async (data, _, user) => {
     const { productVariantSizeId, quantity } = data;
+
     const { id: userId } = user;
 
     const cart = await getOrCreateCart(userId);

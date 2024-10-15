@@ -1,6 +1,7 @@
 "use client";
-import { addRemoveProductToWishlist } from "@/app/[gender]/[[...category-product]]/_actions";
-import { Button } from "@/components/ui/button";
+
+import { addRemoveProductToWishlist } from "@/app/[gender]/_actions";
+import { Button } from "@/ui/button";
 import { Heart } from "lucide-react";
 
 type Props = {

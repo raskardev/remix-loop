@@ -1,7 +1,7 @@
-import { LikeButton } from "@/app/[gender]/[[...category-product]]/components/like-button";
-import { Badge } from "@/components/ui/badge";
+import { LikeButton } from "@/app/[gender]/_components/like-button";
 import type { Product } from "@/lib/types";
 import { cn, priceToEuro } from "@/lib/utils";
+import { Badge } from "@/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,12 +36,19 @@ export function ProductCard({ product }: Props) {
         />
       </Link>
       <div className="mt-3 flex items-center justify-between px-3">
-        <Badge className={cn(isNew ? "visible" : "invisible")}>NEW</Badge>
+        <Badge
+          className={cn(
+            "bg-red-500 text-white font-bold",
+            isNew ? "visible" : "invisible",
+          )}
+        >
+          NEW
+        </Badge>
         <div>
           <span className="block text-center text-sm">{product.name}</span>
           <span className="block text-center font-bold">{formattedPrice}</span>
         </div>
-        <div className="">
+        <div>
           <LikeButton
             productVariantId={product.productVariantId}
             isLiked={product.isWishlisted}

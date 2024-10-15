@@ -1,4 +1,4 @@
-import type { getProductsByName } from "@/app/[gender]/[[...category-product]]/_actions";
+import type { getProductsByName } from "@/app/[gender]/_actions";
 import type {
   getLowerAndUpperPrices,
   getMainCategories,

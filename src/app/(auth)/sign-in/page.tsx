@@ -1,10 +1,10 @@
 "use client";
 
-import { signIn } from "@/app/(auth)/actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { signIn } from "@/app/(auth)/_actions";
 import type { ActionState } from "@/lib/auth/middleware";
+import { Button } from "@/ui/button";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useActionState } from "react";
@@ -18,8 +18,8 @@ export default function SignInPage() {
   );
 
   return (
-    <div className="flex-1 flex items-center justify-center">
-      <div className="max-w-xs w-full">
+    <div className="h-full flex items-center justify-center">
+      <div className="max-w-xs w-full relative">
         <h2 className="text-2xl font-extrabold mb-4">Sign in to Loop</h2>
         <form className="space-y-6" action={formAction}>
           <div>
@@ -74,7 +74,7 @@ export default function SignInPage() {
             )}
           </Button>
         </form>
-        <p className="mt-8">
+        <p className="mt-8 fixed bottom-4 left-1/2 -translate-x-1/2 w-full text-center">
           Don't have an account?{" "}
           <Button
             asChild

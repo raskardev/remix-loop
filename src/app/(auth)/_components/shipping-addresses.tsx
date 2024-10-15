@@ -1,7 +1,8 @@
 "use client";
 
-import { AddShippingAddressModal } from "@/app/(auth)/account/components/add-shipping-address-modal";
-import { deleteShippingAddressAction } from "@/app/(auth)/actions";
+import { deleteShippingAddressAction } from "@/app/(auth)/_actions";
+import { AddShippingAddressModal } from "@/app/(auth)/_components/add-shipping-address-modal";
+import type { ShippingAddress } from "@/lib/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,16 +13,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from "@/ui/alert-dialog";
+import { Button } from "@/ui/button";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import type { ShippingAddress } from "@/lib/types";
+} from "@/ui/card";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 
 type Props = {
@@ -104,7 +104,7 @@ function ShippingAddressCard({ shippingAddress }: ShippingAddressCardProps) {
 
 export function ShippingAddresses({ shippingAddresses }: Props) {
   return (
-    <>
+    <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between">
         <h3 className="text-xl my-4">Shipping Addresses</h3>
         <AddShippingAddressModal
@@ -121,7 +121,7 @@ export function ShippingAddresses({ shippingAddresses }: Props) {
           You don't have any shipping addresses yet.
         </p>
       ) : (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols md:grid-cols-2 gap-4 mt-4">
           {shippingAddresses.map((shippingAddress) => (
             <ShippingAddressCard
               key={shippingAddress.id}
@@ -130,6 +130,6 @@ export function ShippingAddresses({ shippingAddresses }: Props) {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

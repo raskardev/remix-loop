@@ -1,7 +1,8 @@
 "use client";
 
-import { signOut } from "@/app/(auth)/actions";
-import { Button } from "@/components/ui/button";
+import { signOut } from "@/app/(auth)/_actions";
+import { useUser } from "@/lib/auth/provider";
+import { Button } from "@/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useUser } from "@/lib/auth/provider";
+} from "@/ui/dropdown-menu";
 import { CircleAlert, CircleUser, ShoppingBag, User, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
