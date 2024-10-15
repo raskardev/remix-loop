@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/ui/select";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -124,7 +125,13 @@ export function ProductDetail({ product }: Props) {
               className="w-full rounded-full h-10 font-bold"
               type="submit"
             >
-              Add to cart
+              {pending ? (
+                <>
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" /> Loading...
+                </>
+              ) : (
+                <>Add to cart</>
+              )}
             </Button>
             <LikeButton
               productVariantId={selectedVariant.productVariantId}
