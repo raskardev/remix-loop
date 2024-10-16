@@ -1,4 +1,4 @@
-import { ProductCard } from "@/app/[gender]/_components/product-card";
+import { ProductCard } from "@/app/(app)/[gender]/_components/product-card";
 import type { Product } from "@/lib/types";
 
 type Props = {

@@ -1,6 +1,6 @@
-import { addRemoveProductToWishlist } from "@/app/[gender]/_actions";
-import { DeleteProductButton } from "@/app/[gender]/_components/delete-product-button";
-import { LikeButton } from "@/app/[gender]/_components/like-button";
+import { addRemoveProductToWishlist } from "@/app/(app)/[gender]/_actions";
+import { DeleteProductButton } from "@/app/(app)/[gender]/_components/delete-product-button";
+import { LikeButton } from "@/app/(app)/[gender]/_components/like-button";
 import type {
   ShoppingBagItem as ShoppingBagItemType,
   WishlistItem as WishlistItemType,

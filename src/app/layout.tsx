@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { UserProvider } from "@/lib/auth/provider";
 import { getUser } from "@/lib/db/queries";
 import { Toaster } from "@/ui/sonner";
@@ -71,6 +72,7 @@ export default function RootLayout({
         <UserProvider userPromise={userPromise}>
           {children}
           <Toaster />
+          <TailwindIndicator />
         </UserProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ export default async function PurchasesPage() {
   const purchases = await getPurchases();
 
   return (
-    <div className="pb-24 max-w-xl mx-auto">
+    <div className="max-w-xl mx-auto">
       <h2 className="text-2xl mb-4 font-bold">Purchases</h2>
       <div className="flex flex-col space-y-4">
         {Array.from(purchases).map(([date, purchases]) => (

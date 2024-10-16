@@ -1,8 +1,8 @@
 "use client";
 
-import { addToCart } from "@/app/[gender]/_actions";
-import { DeleteProductButton } from "@/app/[gender]/_components/delete-product-button";
-import { checkoutAction } from "@/app/cart/_actions";
+import { addToCart } from "@/app/(app)/[gender]/_actions";
+import { DeleteProductButton } from "@/app/(app)/[gender]/_components/delete-product-button";
+import { checkoutAction } from "@/app/(app)/cart/_actions";
 import type { ActionState } from "@/lib/auth/middleware";
 import type { ShippingAddress, ShoppingBagItem } from "@/lib/types";
 import { priceToEuro } from "@/lib/utils";
@@ -48,7 +48,7 @@ function BagListProduct({ product }: BagListProductProps) {
   return (
     <li
       key={product.cartProductId}
-      className="flex flex-col md:flex-row gap-4 border p-4 rounded-md"
+      className="flex flex-col xl:flex-row gap-4 border p-4 rounded-md"
     >
       <div className="flex gap-4">
         <Image
@@ -67,7 +67,7 @@ function BagListProduct({ product }: BagListProductProps) {
           <span>Quantity: {product.quantity}</span>
         </div>
       </div>
-      <div className="md:ml-auto flex items-start space-x-4">
+      <div className="xl:ml-auto flex items-start space-x-4">
         <div className="flex items-center border rounded-full overflow-hidden">
           <Button
             variant="ghost"
@@ -121,7 +121,7 @@ export function Cart({ shippingAddresses, shoppingBagItems }: Props) {
   return (
     <>
       <h3 className="text-xl mb-4 font-bold">Shopping Bag</h3>
-      <ul className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {shoppingBagItems.map((item) => (
           <BagListProduct key={item.cartProductId} product={item} />
         ))}

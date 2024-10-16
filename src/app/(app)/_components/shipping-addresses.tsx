@@ -1,7 +1,7 @@
 "use client";
 
+import { AddShippingAddressModal } from "@/app/(app)/_components/add-shipping-address-modal";
 import { deleteShippingAddressAction } from "@/app/(auth)/_actions";
-import { AddShippingAddressModal } from "@/app/(auth)/_components/add-shipping-address-modal";
 import type { ShippingAddress } from "@/lib/types";
 import {
   AlertDialog,

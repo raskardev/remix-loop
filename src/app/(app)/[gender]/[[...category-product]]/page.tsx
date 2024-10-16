@@ -1,5 +1,5 @@
-import { ProductDetail } from "@/app/[gender]/_components/product-detail";
-import { ProductList } from "@/app/[gender]/_components/product-list";
+import { ProductDetail } from "@/app/(app)/[gender]/_components/product-detail";
+import { ProductList } from "@/app/(app)/[gender]/_components/product-list";
 import { getMainCategories, getProduct, getProducts } from "@/lib/db/queries";
 import { redirect } from "next/navigation";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { FilterSheet } from "@/app/[gender]/_components/filter-sheet";
+import { FilterSheet } from "@/app/(app)/[gender]/_components/filter-sheet";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
 import type { Category, MinMaxPrices } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -20,6 +20,8 @@ type Props = {
   colors: string[];
   minMaxPrices: MinMaxPrices;
 };
+
+const EXCLUDED_PATHS = ["/", "/account"];
 
 function DesktopCategoryLink({ category }: { category: Category }) {
   const pathname = usePathname();
@@ -73,6 +75,7 @@ function MobileCategoryLink({ category }: { category: Category }) {
 }
 
 export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
+  const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const allItems: Category = {
@@ -80,6 +83,8 @@ export function CategorySelector({ categories, colors, minMaxPrices }: Props) {
     name: "All",
     slug: "_",
   };
+
+  if (EXCLUDED_PATHS.includes(pathname)) return null;
 
   if (isDesktop) {
     return (

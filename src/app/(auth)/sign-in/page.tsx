@@ -18,7 +18,7 @@ export default function SignInPage() {
   );
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="flex items-center justify-center h-full">
       <div className="max-w-xs w-full relative">
         <h2 className="text-2xl font-extrabold mb-4">Sign in to Loop</h2>
         <form className="space-y-6" action={formAction}>

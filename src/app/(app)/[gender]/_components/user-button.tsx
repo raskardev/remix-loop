@@ -1,7 +1,7 @@
 "use client";
 
-import { CartWishSidebar } from "@/app/[gender]/_components/cart-wish-sidebar";
-import { UserDropdown } from "@/app/[gender]/_components/user-dropdown";
+import { CartWishSidebar } from "@/app/(app)/[gender]/_components/cart-wish-sidebar";
+import { UserDropdown } from "@/app/(app)/[gender]/_components/user-dropdown";
 import { useUser } from "@/lib/auth/provider";
 import type {} from "@/lib/db/queries";
 import type { ShoppingBagItem, WishlistItem } from "@/lib/types";

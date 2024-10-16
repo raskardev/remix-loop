@@ -1,6 +1,6 @@
-import { CategorySelector } from "@/app/[gender]/_components/category-selector";
-import { SearchDialog } from "@/app/[gender]/_components/search-dialog";
-import { UserButton } from "@/app/[gender]/_components/user-button";
+import { CategorySelector } from "@/app/(app)/[gender]/_components/category-selector";
+import { SearchDialog } from "@/app/(app)/[gender]/_components/search-dialog";
+import { UserButton } from "@/app/(app)/[gender]/_components/user-button";
 import {
   getColors,
   getLowerAndUpperPrices,
@@ -11,11 +11,11 @@ import {
 import Link from "next/link";
 
 export async function Header() {
-  const [categories, shoppingBagItems, wishlistItems, colors, minMaxPrices] =
+  const [shoppingBagItems, wishlistItems, categories, colors, minMaxPrices] =
     await Promise.all([
-      getMainCategories(),
       getShoppingBagItems(),
       getWishlistItems(),
+      getMainCategories(),
       getColors(),
       getLowerAndUpperPrices(),
     ]);

@@ -1,4 +1,4 @@
-import { LikeButton } from "@/app/[gender]/_components/like-button";
+import { LikeButton } from "@/app/(app)/[gender]/_components/like-button";
 import type { Product } from "@/lib/types";
 import { cn, priceToEuro } from "@/lib/utils";
 import { Badge } from "@/ui/badge";

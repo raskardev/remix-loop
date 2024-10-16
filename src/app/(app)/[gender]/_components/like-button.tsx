@@ -1,6 +1,6 @@
 "use client";
 
-import { addRemoveProductToWishlist } from "@/app/[gender]/_actions";
+import { addRemoveProductToWishlist } from "@/app/(app)/[gender]/_actions";
 import { Button } from "@/ui/button";
 import { Heart } from "lucide-react";
 

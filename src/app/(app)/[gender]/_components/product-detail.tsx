@@ -1,7 +1,7 @@
 "use client";
 
-import { addToCart } from "@/app/[gender]/_actions";
-import { LikeButton } from "@/app/[gender]/_components/like-button";
+import { addToCart } from "@/app/(app)/[gender]/_actions";
+import { LikeButton } from "@/app/(app)/[gender]/_components/like-button";
 import type { ActionState } from "@/lib/auth/middleware";
 import type { ProductDetail as ProductDetailType } from "@/lib/types";
 import { cn, priceToEuro } from "@/lib/utils";

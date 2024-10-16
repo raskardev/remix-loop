@@ -1,7 +1,7 @@
 "use client";
 
-import { getProductsByName } from "@/app/[gender]/_actions";
-import { ProductList } from "@/app/[gender]/_components/product-list";
+import { getProductsByName } from "@/app/(app)/[gender]/_actions";
+import { ProductList } from "@/app/(app)/[gender]/_components/product-list";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { ProductByName } from "@/lib/types";

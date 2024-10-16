@@ -1,4 +1,4 @@
-import { Cart } from "@/app/cart/components/cart";
+import { Cart } from "@/app/(app)/cart/components/cart";
 import { getShippingAddresses, getShoppingBagItems } from "@/lib/db/queries";
 
 export default async function CartPage() {

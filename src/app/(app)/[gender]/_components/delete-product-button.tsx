@@ -1,4 +1,4 @@
-import { removeFromCart } from "@/app/[gender]/_actions";
+import { removeFromCart } from "@/app/(app)/[gender]/_actions";
 import { Button } from "@/ui/button";
 import { Trash2 } from "lucide-react";
 
