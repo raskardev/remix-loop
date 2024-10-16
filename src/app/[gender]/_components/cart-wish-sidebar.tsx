@@ -8,6 +8,7 @@ import type {
 import { priceToEuro } from "@/lib/utils";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
+import { ScrollArea } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import {
   Sheet,
@@ -171,28 +172,26 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
           <TabsContent value="shopping-bag" className="flex-1">
             {shoppingBagItems.length > 0 ? (
               <div className="h-full flex flex-col">
-                <div className="flex-1">
+                <ScrollArea className="flex-1 basis-0">
                   {shoppingBagItems.map((item) => (
                     <div key={item.cartProductId}>
                       <ShoppingBagItem product={item} />
                       <Separator className="my-2" />
                     </div>
                   ))}
+                </ScrollArea>
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold">Total</span>
+                  <span className="text-xl font-bold">{formattedPrice}</span>
                 </div>
-                <div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold">Total</span>
-                    <span className="text-xl font-bold">{formattedPrice}</span>
-                  </div>
-                  <Button
-                    className="w-full mt-4 h-12 rounded-full font-bold"
-                    asChild
-                  >
-                    <SheetClose asChild>
-                      <Link href="/cart">Process order</Link>
-                    </SheetClose>
-                  </Button>
-                </div>
+                <Button
+                  className="w-full mt-4 h-12 rounded-full font-bold"
+                  asChild
+                >
+                  <SheetClose asChild>
+                    <Link href="/cart">Process order</Link>
+                  </SheetClose>
+                </Button>
               </div>
             ) : (
               <div className="text-center">
@@ -203,19 +202,28 @@ export function CartWishSidebar({ shoppingBagItems, wishlistItems }: Props) {
               </div>
             )}
           </TabsContent>
-          <TabsContent value="wishlist">
-            {wishlistItems.length > 0 ? (
-              <div className="grid grid-cols-2 gap-1">
-                {wishlistItems.map((item) => (
-                  <WishlistItem key={item.productVariantId} product={item} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center">
-                <h3 className="text-2xl font-bold">Your wishlish is empty</h3>
-                <p className="mt-4">Why not fill it up?</p>
-              </div>
-            )}
+          <TabsContent value="wishlist" className="flex-1">
+            <div className="flex flex-col h-full">
+              <ScrollArea className="flex-1 basis-0">
+                {wishlistItems.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-1">
+                    {wishlistItems.map((item) => (
+                      <WishlistItem
+                        key={item.productVariantId}
+                        product={item}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold">
+                      Your wishlish is empty
+                    </h3>
+                    <p className="mt-4">Why not fill it up?</p>
+                  </div>
+                )}
+              </ScrollArea>
+            </div>
           </TabsContent>
         </Tabs>
       </SheetContent>

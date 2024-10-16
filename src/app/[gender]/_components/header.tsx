@@ -25,7 +25,7 @@ export async function Header() {
       <div className="h-24 flex items-center relative">
         <Link
           href="/"
-          className="text-xl md:text-4xl text-white uppercase font-bold justify-self-center md:absolute md:top-1/2 md:-translate-y-1/2 md:left-1/2 md:-translate-x-1/2"
+          className="text-2xl md:text-4xl text-white uppercase font-bold justify-self-center md:absolute md:top-1/2 md:-translate-y-1/2 md:left-1/2 md:-translate-x-1/2"
         >
           LOOP
         </Link>
