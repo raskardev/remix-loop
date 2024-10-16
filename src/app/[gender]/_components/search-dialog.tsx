@@ -3,6 +3,7 @@
 import { getProductsByName } from "@/app/[gender]/_actions";
 import { ProductList } from "@/app/[gender]/_components/product-list";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { ProductByName } from "@/lib/types";
 import { Button } from "@/ui/button";
 import {
@@ -94,19 +95,21 @@ export function SearchDialog() {
             />
           </form>
         </div>
-        {products ? (
-          products.length > 0 ? (
-            <ProductList products={products} />
-          ) : (
-            <div className="text-center">
-              <h3 className="text-2xl font-bold">No products found</h3>
-              <p className="mt-4">
-                Sorry, we couldn't find any products matching your search
-                criteria.
-              </p>
-            </div>
-          )
-        ) : null}
+        <ScrollArea className="flex-1 basis-0">
+          {products ? (
+            products.length > 0 ? (
+              <ProductList products={products} />
+            ) : (
+              <div className="text-center">
+                <h3 className="text-2xl font-bold">No products found</h3>
+                <p className="mt-4">
+                  Sorry, we couldn't find any products matching your search
+                  criteria.
+                </p>
+              </div>
+            )
+          ) : null}
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
