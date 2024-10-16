@@ -10,6 +10,9 @@ export default function AppLayout({
     <div>
       <Header />
       {children}
+      <footer className="mt-12 h-24 flex items-center justify-center font-bold">
+        ~ LOOP Copyright {new Date().getFullYear()} &copy; ~
+      </footer>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 CREATE TABLE `cart_products` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`cart_id` text NOT NULL,
 	`product_variant_size_id` text NOT NULL,
 	`quantity` integer DEFAULT 1 NOT NULL,
@@ -8,13 +8,13 @@ CREATE TABLE `cart_products` (
 );
 --> statement-breakpoint
 CREATE TABLE `carts` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `categories` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100) NOT NULL,
 	`parent_id` text,
 	`active` integer DEFAULT false,
@@ -22,23 +22,23 @@ CREATE TABLE `categories` (
 );
 --> statement-breakpoint
 CREATE TABLE `colors` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100) NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `order_items` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`quantity` integer DEFAULT 1 NOT NULL,
 	`order_id` text,
-	`product_variant_id` text,
+	`product_variant_size_id` text,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`product_variant_size_id`) REFERENCES `product_variant_sizes`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `orders` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`amount` real NOT NULL,
 	`status` text DEFAULT 'pending' NOT NULL,
 	`user_id` text,
@@ -49,7 +49,7 @@ CREATE TABLE `orders` (
 );
 --> statement-breakpoint
 CREATE TABLE `product_variant_sizes` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`product_variant_id` text NOT NULL,
 	`size_id` text NOT NULL,
 	`stock` integer NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `product_variant_sizes` (
 );
 --> statement-breakpoint
 CREATE TABLE `product_variants` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`product_id` text,
 	`color_id` text,
 	`image_url` text NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `product_variants` (
 );
 --> statement-breakpoint
 CREATE TABLE `products` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(50) NOT NULL,
 	`description` text(200) NOT NULL,
 	`category_id` text NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE `products` (
 );
 --> statement-breakpoint
 CREATE TABLE `shipping_addresses` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100) NOT NULL,
 	`surnames` text(200) NOT NULL,
 	`country` text(50) NOT NULL,
@@ -103,13 +103,13 @@ CREATE TABLE `shipping_addresses` (
 );
 --> statement-breakpoint
 CREATE TABLE `sizes` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100) NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `users` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100) NOT NULL,
 	`email` text(255) NOT NULL,
 	`password_hash` text NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE `users` (
 );
 --> statement-breakpoint
 CREATE TABLE `wishlists` (
-	`id` text PRIMARY KEY DEFAULT (uuid()) NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text,
 	`product_variant_id` text NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,

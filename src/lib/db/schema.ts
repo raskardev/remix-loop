@@ -186,8 +186,8 @@ export const orderItemsSchema = sqliteTable("order_items", {
   id: text("id").$defaultFn(randomUUID).primaryKey(),
   quantity: integer("quantity").default(1).notNull(),
   orderId: text("order_id").references(() => ordersSchema.id),
-  productVariantId: text("product_variant_id").references(
-    () => productVariantsSchema.id,
+  productVariantSizeId: text("product_variant_size_id").references(
+    () => productVariantSizes.id,
   ),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });

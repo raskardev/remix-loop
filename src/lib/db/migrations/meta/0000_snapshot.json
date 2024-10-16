@@ -1,7 +1,7 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "453bbc8a-26d9-4ce3-b134-6d59fce5e93f",
+	"id": "77b17905-c9b3-40eb-9fbf-7a7e0e66291b",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"cart_products": {
@@ -12,8 +12,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"cart_id": {
 					"name": "cart_id",
@@ -70,8 +69,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"user_id": {
 					"name": "user_id",
@@ -104,8 +102,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -156,8 +153,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -194,8 +190,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"quantity": {
 					"name": "quantity",
@@ -212,8 +207,8 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"product_variant_id": {
-					"name": "product_variant_id",
+				"product_variant_size_id": {
+					"name": "product_variant_size_id",
 					"type": "text",
 					"primaryKey": false,
 					"notNull": false,
@@ -239,11 +234,11 @@
 					"onDelete": "no action",
 					"onUpdate": "no action"
 				},
-				"order_items_product_variant_id_product_variants_id_fk": {
-					"name": "order_items_product_variant_id_product_variants_id_fk",
+				"order_items_product_variant_size_id_product_variant_sizes_id_fk": {
+					"name": "order_items_product_variant_size_id_product_variant_sizes_id_fk",
 					"tableFrom": "order_items",
-					"tableTo": "product_variants",
-					"columnsFrom": ["product_variant_id"],
+					"tableTo": "product_variant_sizes",
+					"columnsFrom": ["product_variant_size_id"],
 					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
@@ -260,8 +255,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"amount": {
 					"name": "amount",
@@ -333,8 +327,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"product_variant_id": {
 					"name": "product_variant_id",
@@ -406,8 +399,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"product_id": {
 					"name": "product_id",
@@ -479,8 +471,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -579,8 +570,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -699,8 +689,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -737,8 +726,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"name": {
 					"name": "name",
@@ -797,8 +785,7 @@
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true,
-					"autoincrement": false,
-					"default": "(uuid())"
+					"autoincrement": false
 				},
 				"user_id": {
 					"name": "user_id",

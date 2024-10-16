@@ -702,7 +702,7 @@ export async function createOrderWithItems({
     db.insert(orderItemsSchema).values({
       quantity: item.quantity,
       orderId,
-      productVariantId: item.productVariantId,
+      productVariantSizeId: item.productVariantSizeId,
     }),
   );
 
@@ -740,4 +740,87 @@ export async function updateOrderByIdAndUserId({
   await deleteCart(userId);
 
   return success;
+}
+
+export async function getPurchases() {
+  const user = await getUser();
+
+  if (!user) return [];
+
+  const purchases = await db
+    .select({
+      id: orderItemsSchema.id,
+      gender: productsSchema.targetGender,
+      productName: productsSchema.name,
+      productSlug: productsSchema.slug,
+      productPrice: productsSchema.price,
+      orderDate: ordersSchema.createdAt,
+      categorySlug: categoriesSchema.slug,
+      sizeName: sizesSchema.name,
+      colorName: colorsSchema.name,
+      imageUrl: productVariantsSchema.imageUrl,
+      quantity: orderItemsSchema.quantity,
+    })
+    .from(orderItemsSchema)
+    .leftJoin(ordersSchema, eq(ordersSchema.id, orderItemsSchema.orderId))
+    .leftJoin(
+      productVariantSizes,
+      eq(orderItemsSchema.productVariantSizeId, productVariantSizes.id),
+    )
+    .leftJoin(
+      productVariantsSchema,
+      eq(productVariantsSchema.id, productVariantSizes.productVariantId),
+    )
+    .leftJoin(
+      productsSchema,
+      eq(productVariantsSchema.productId, productsSchema.id),
+    )
+    .leftJoin(sizesSchema, eq(productVariantSizes.sizeId, sizesSchema.id))
+    .leftJoin(
+      categoriesSchema,
+      eq(productsSchema.categoryId, categoriesSchema.id),
+    )
+    .leftJoin(colorsSchema, eq(productVariantsSchema.colorId, colorsSchema.id))
+    .groupBy(orderItemsSchema.id)
+    .where(
+      and(
+        eq(ordersSchema.status, "completed"),
+        eq(ordersSchema.userId, user.id),
+      ),
+    )
+    .orderBy(desc(ordersSchema.createdAt));
+
+  const parsedPurchases = purchases.reduce(
+    (acc, purchase) => {
+      const { orderDate, ...rest } = purchase;
+
+      if (!orderDate) return acc;
+
+      const date = orderDate.split(" ")[0];
+
+      if (acc.has(date)) {
+        acc.get(date)?.push(rest);
+      } else {
+        acc.set(date, [rest]);
+      }
+      return acc;
+    },
+    new Map<
+      string,
+      {
+        id: string | null;
+        productName: string | null;
+        productPrice: number | null;
+        sizeName: string | null;
+        colorName: string | null;
+        categorySlug: string | null;
+        productSlug: string | null;
+        gender: string | null;
+        imageUrl: string | null;
+        quantity: number;
+      }[]
+    >(),
+  );
+
+  return parsedPurchases;
 }

@@ -99,7 +99,8 @@ export function ProductDetail({ product }: Props) {
             resetKey={() => setKey(+new Date())}
           />
         ) : null}
-        <form action={formAction}>
+        {/* TODO: fix select to persist selected size */}
+        <form action={formAction} onSubmit={() => setKey(+new Date())}>
           <input type="hidden" name="quantity" value={1} />
           <Select name="productVariantSizeId" key={key} required>
             <SelectTrigger className="w-full mt-4">

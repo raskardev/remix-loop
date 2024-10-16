@@ -45,9 +45,11 @@ export function UserDropdown() {
           </Button>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="h-14">
-          <ShoppingBag />
-          <span className="ml-6 text-base">My purchases</span>
+        <DropdownMenuItem className="h-14" asChild>
+          <Link href="/account/purchases">
+            <ShoppingBag />
+            <span className="ml-6 text-base">My purchases</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="h-14" asChild>
