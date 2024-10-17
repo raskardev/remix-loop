@@ -49,8 +49,8 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
-  { rel: "stylesheet", href: geistSans },
-  { rel: "stylesheet", href: geistMono },
+  { rel: "font/woff", href: geistSans },
+  { rel: "font/woff", href: geistMono },
 ];
 
 export default function App() {
