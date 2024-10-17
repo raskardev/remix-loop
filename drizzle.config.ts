@@ -8,8 +8,8 @@ if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
 }
 
 export default {
-  schema: "./src/lib/db/schema.ts",
-  out: "./src/lib/db/migrations",
+  schema: "./app/lib/db/schema.ts",
+  out: "./app/lib/db/migrations",
   dialect: "sqlite",
   driver: "turso",
   dbCredentials: {
