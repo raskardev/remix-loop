@@ -16,7 +16,6 @@ import {
   SelectValue,
 } from "@/ui/select";
 import { Minus, Plus } from "lucide-react";
-import Image from "next/image";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -48,47 +47,47 @@ function BagListProduct({ product }: BagListProductProps) {
   return (
     <li
       key={product.cartProductId}
-      className="flex flex-col xl:flex-row gap-4 border p-4 rounded-md"
+      className="flex flex-col gap-4 border p-4 rounded-md w-96"
     >
-      <div className="flex gap-4">
-        <Image
-          quality={100}
+      <div className="flex gap-4 h-full">
+        <img
           src={product.imageUrl ?? ""}
           alt={product.productName ?? ""}
-          width={100}
-          height={100}
+          className="h-64 w-auto my-auto"
         />
-        <div className="flex flex-col">
-          <span className="font-bold">{product.productName}</span>
-          <span className="font-bold text-lg">
-            {priceFormatter.format(priceToEuro(product.price))}
-          </span>
-          <span>{product.sizeName}</span>
-          <span>Quantity: {product.quantity}</span>
+        <div className="flex flex-col justify-between">
+          <div className="flex flex-col">
+            <span className="font-bold">{product.productName}</span>
+            <span className="font-bold text-lg">
+              {priceFormatter.format(priceToEuro(product.price))}
+            </span>
+            <span>{product.sizeName}</span>
+            <span>Quantity: {product.quantity}</span>
+          </div>
+          <div className="flex items-start space-x-4 ml-auto">
+            <div className="flex items-center border rounded-full overflow-hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleAddOrRemove("add")}
+              >
+                <Plus />
+              </Button>
+              <span className="h-9 w-9 flex items-center justify-center">
+                {product.quantity}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={product.quantity === 1}
+                onClick={() => handleAddOrRemove("remove")}
+              >
+                <Minus />
+              </Button>
+            </div>
+            <DeleteProductButton cartProductId={product.cartProductId} />
+          </div>
         </div>
-      </div>
-      <div className="xl:ml-auto flex items-start space-x-4">
-        <div className="flex items-center border rounded-full overflow-hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => handleAddOrRemove("add")}
-          >
-            <Plus />
-          </Button>
-          <span className="h-9 w-9 flex items-center justify-center">
-            {product.quantity}
-          </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            disabled={product.quantity === 1}
-            onClick={() => handleAddOrRemove("remove")}
-          >
-            <Minus />
-          </Button>
-        </div>
-        <DeleteProductButton cartProductId={product.cartProductId} />
       </div>
     </li>
   );
@@ -121,7 +120,7 @@ export function Cart({ shippingAddresses, shoppingBagItems }: Props) {
   return (
     <>
       <h3 className="text-xl mb-4 font-bold">Shopping Bag</h3>
-      <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <ul className="flex flex-wrap gap-4">
         {shoppingBagItems.map((item) => (
           <BagListProduct key={item.cartProductId} product={item} />
         ))}
