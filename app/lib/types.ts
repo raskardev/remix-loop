@@ -1,4 +1,4 @@
-import type { getProductsByName } from "@/app/[gender]/_actions";
+import type { getProductsByName } from "@/models/products.server";
 import type {
   getLowerAndUpperPrices,
   getMainCategories,
@@ -6,7 +6,7 @@ import type {
   getShippingAddresses,
   getShoppingBagItems,
   getWishlistItems,
-} from "./db/queries";
+} from "./db/queries.server";
 
 export type ProductDetail = {
   name: string;
