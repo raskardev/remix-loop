@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { validatedActionWithUser } from "../../../app/lib/auth/middleware";
-import { createOrderWithItems } from "../../../app/lib/db/queries";
+import { createOrderWithItems } from "../../../app/lib/db/queries.server";
 import { createCheckoutSession } from "../../../app/lib/stripe";
 
 const checkoutActionSchema = z.object({

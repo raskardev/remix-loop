@@ -1,28 +1,40 @@
 import { db } from "@/lib/db/drizzle";
 import { usersSchema, type NewUser } from "@/lib/db/schema";
-import { createUserSession } from "@/models/session.server";
-import { json } from "@remix-run/node";
-import { compare, hash } from "bcryptjs";
+import { combineHeaders } from "@/lib/utils";
+import {
+  createUserSession,
+  destroySession,
+  getSession,
+} from "@/models/session.server";
+import { json, redirect } from "@remix-run/node";
+import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { safeRedirect } from "remix-utils/safe-redirect";
 import { z } from "zod";
 
 const SALT_ROUNDS = 10;
 
 export async function hashPassword(password: string) {
-  return hash(password, SALT_ROUNDS);
+  return bcrypt.hash(password, SALT_ROUNDS);
 }
 
 export async function comparePasswords(
   plainPassword: string,
   hashedPassword: string,
 ) {
-  return await compare(plainPassword, hashedPassword);
+  return await bcrypt.compare(plainPassword, hashedPassword);
 }
+
+export const loginSchema = z.object({
+  email: z.string().email().min(3).max(255),
+  password: z.string().min(8).max(100),
+});
 
 export const login = async ({
   email,
   password,
-}: { email: string; password: string }) => {
+  redirectTo = "/",
+}: { email: string; password: string; redirectTo?: string }) => {
   const usersData = await db
     .select()
     .from(usersSchema)
@@ -51,10 +63,31 @@ export const login = async ({
     );
   }
 
-  return createUserSession(user.id, "/");
+  return createUserSession(user.id, redirectTo);
 };
 
-const signUpSchema = z
+export async function logout(
+  {
+    request,
+    redirectTo = "/",
+  }: {
+    request: Request;
+    redirectTo?: string;
+  },
+  responseInit?: ResponseInit,
+) {
+  const authSession = await getSession(request.headers.get("cookie"));
+
+  throw redirect(safeRedirect(redirectTo), {
+    ...responseInit,
+    headers: combineHeaders(
+      { "set-cookie": await destroySession(authSession) },
+      responseInit?.headers,
+    ),
+  });
+}
+
+export const signUpSchema = z
   .object({
     name: z.string().min(3, {
       message: "Name is required and must be at least 3 characters",
@@ -66,7 +99,7 @@ const signUpSchema = z
       message: "Password is required and must be at least 8 characters",
     }),
     passwordConfirm: z.string().min(8, {
-      message: "Password is required and must be at least 8 characters",
+      message: "Confirm password is required and must be at least 8 characters",
     }),
   })
   .refine((data) => data.password === data.passwordConfirm, {

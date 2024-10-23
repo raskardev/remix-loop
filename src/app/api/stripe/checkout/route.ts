@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateOrderByIdAndUserId } from "../../../../../app/lib/db/queries";
+import { updateOrderByIdAndUserId } from "../../../../../app/lib/db/queries.server";
 import { stripe } from "../../../../../app/lib/stripe";
 
 export async function GET(request: NextRequest) {

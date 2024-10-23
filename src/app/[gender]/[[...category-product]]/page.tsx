@@ -5,7 +5,7 @@ import {
   getMainCategories,
   getProduct,
   getProducts,
-} from "../../../../app/lib/db/queries";
+} from "../../../../app/lib/db/queries.server";
 
 type Props = {
   params: {

@@ -2,7 +2,7 @@ import { Cart } from "@/app/cart/components/cart";
 import {
   getShippingAddresses,
   getShoppingBagItems,
-} from "../../../app/lib/db/queries";
+} from "../../../app/lib/db/queries.server";
 
 export default async function CartPage() {
   const [shoppingBagItems, shippingAddresses] = await Promise.all([

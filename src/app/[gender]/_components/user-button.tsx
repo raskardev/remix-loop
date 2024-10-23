@@ -6,7 +6,7 @@ import { User } from "lucide-react";
 import Link from "next/link";
 import colors from "tailwindcss/colors";
 import { useUser } from "../../../../app/lib/auth/provider";
-import type {} from "../../../../app/lib/db/queries";
+import type {} from "../../../../app/lib/db/queries.server";
 import type { ShoppingBagItem, WishlistItem } from "../../../../app/lib/types";
 
 type Props = {

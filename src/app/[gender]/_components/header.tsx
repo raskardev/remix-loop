@@ -8,7 +8,7 @@ import {
   getMainCategories,
   getShoppingBagItems,
   getWishlistItems,
-} from "../../../../app/lib/db/queries";
+} from "../../../../app/lib/db/queries.server";
 
 export async function Header() {
   const [categories, shoppingBagItems, wishlistItems, colors, minMaxPrices] =

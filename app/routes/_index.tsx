@@ -1,24 +1,33 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import { json } from "@vercel/remix";
-import { getShoppingBagItems, getWishlistItems } from "@/lib/db/queries";
+import { json, type LoaderFunctionArgs } from "@vercel/remix";
+import {
+  getShoppingBagItems,
+  getUser,
+  getWishlistItems,
+} from "@/lib/db/queries.server";
+import { Header } from "@/components/header";
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const user = await getUser(request);
+
   const [shoppingBagItems, wishlistItems] = await Promise.all([
-    getShoppingBagItems(),
-    getWishlistItems(),
+    getShoppingBagItems(request),
+    getWishlistItems(request),
   ]);
 
   return json({
+    user,
     shoppingBagItems,
     wishlistItems,
   });
 };
 
-export default function Home() {
-  const { shoppingBagItems, wishlistItems } = useLoaderData<typeof loader>();
+export const useIndexLoaderData = () => useLoaderData<typeof loader>();
 
+export default function Home() {
   return (
     <>
+      <Header />
       <div className="min-h-dvh grid grid-cols-1 md:grid-cols-2 absolute inset-0">
         <Link
           to="/woman"

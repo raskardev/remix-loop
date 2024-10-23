@@ -18,7 +18,7 @@ import { db } from "../../../app/lib/db/drizzle";
 import {
   addOrUpdateShippingAddress,
   deleteShippingAddress,
-} from "../../../app/lib/db/queries";
+} from "../../../app/lib/db/queries.server";
 import { type NewUser, usersSchema } from "../../../app/lib/db/schema";
 
 const signInSchema = z.object({

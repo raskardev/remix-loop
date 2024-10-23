@@ -15,7 +15,7 @@ import {
   getOrCreateCart,
   getProducts,
   removeProductFromCart,
-} from "../../../app/lib/db/queries";
+} from "../../../app/lib/db/queries.server";
 
 const addRemoveProductToWishlistSchema = z.object({
   productVariantId: z.string(),

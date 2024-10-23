@@ -3,7 +3,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "../../../../app/components/ui/radio-group";
-import { getShippingAddresses } from "../../../../app/lib/db/queries";
+import { getShippingAddresses } from "../../../../app/lib/db/queries.server";
 
 export default async function AddressPage() {
   const shippingAddresses = await getShippingAddresses();
